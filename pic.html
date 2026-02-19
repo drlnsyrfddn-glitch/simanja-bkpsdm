@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SI-MANJA — Dashboard PIC</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .card { border: 1px solid rgba(148,163,184,0.25); box-shadow: 0 10px 30px rgba(15,23,42,0.05); }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+
+<!-- TOP NOTICE -->
+<div class="bg-blue-600 text-white">
+  <div class="max-w-6xl mx-auto px-6 py-2 text-xs md:text-sm flex flex-col md:flex-row gap-1 md:gap-6 justify-between">
+    <div class="opacity-95">SI-MANJA — Dashboard PIC untuk mengelola jadwal layanan & status kunjungan.</div>
+    <div class="opacity-95">Gunakan filter tanggal & status untuk memudahkan monitoring.</div>
+  </div>
+</div>
+
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+  <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+
+    <!-- Logo + Brand -->
+    <a href="index.html" class="flex items-center gap-3">
+      <img
+        src="assets/logo1.png"
+        alt="Logo Kabupaten Luwu Timur"
+        class="h-11 w-auto object-contain"
+      />
+      <div class="leading-tight">
+        <div class="font-extrabold text-slate-900 tracking-tight">SI-MANJA</div>
+        <div class="text-[11px] text-slate-500 font-semibold -mt-0.5">
+          Sistem Manajemen Kunjungan • Dashboard PIC
+        </div>
+      </div>
+    </a>
+
+    <!-- Right Menu -->
+    <div class="flex items-center gap-3">
+      <div id="headerBadge" class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700">
+        <span id="headerPic">PIC: -</span>
+        <span class="text-slate-400">•</span>
+        <span id="headerLayanan">Layanan: -</span>
+      </div>
+
+      <a href="index.html"
+         class="px-4 py-2 text-sm rounded-xl border border-slate-300 hover:bg-slate-100 font-bold">
+        Home
+      </a>
+
+      <button id="logoutBtn"
+        class="hidden px-4 py-2 text-sm rounded-xl bg-red-500 text-white hover:bg-red-600 font-bold">
+        Logout
+      </button>
+    </div>
+
+  </nav>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-8 space-y-6">
+
+  <!-- LOGIN -->
+  <div id="loginCard" class="card bg-white rounded-3xl p-6 max-w-3xl mx-auto">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div>
+        <h2 class="text-2xl font-extrabold">Login PIC</h2>
+        <p class="text-sm text-slate-600 mt-1">
+          Masuk sebagai PIC untuk mengatur jam layanan dan memperbarui status kunjungan.
+        </p>
+      </div>
+      <button id="refreshServicesBtn"
+        class="px-4 py-2 rounded-xl border text-sm font-bold hover:bg-slate-50">
+        Refresh Layanan
+      </button>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-4 mt-5">
+      <div>
+        <label class="text-sm font-bold">Layanan</label>
+        <select id="loginLayanan" class="mt-2 w-full border rounded-xl px-4 py-3 bg-white">
+          <option value="">Memuat layanan...</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="text-sm font-bold">Username</label>
+        <input id="loginUsername" placeholder="contoh: username PIC"
+          class="mt-2 w-full border rounded-xl px-4 py-3" />
+      </div>
+
+      <div>
+        <label class="text-sm font-bold">Password</label>
+        <input id="loginPassword" type="password" placeholder="password PIC"
+          class="mt-2 w-full border rounded-xl px-4 py-3" />
+      </div>
+    </div>
+
+    <button id="loginBtn"
+      class="mt-5 w-full bg-blue-600 text-white py-3 rounded-xl font-extrabold hover:bg-blue-700 transition">
+      Login
+    </button>
+
+    <div id="loginMsg" class="mt-4"></div>
+
+    <div class="mt-4 text-xs text-slate-500">
+      Tips: Pastikan memilih layanan yang benar sebelum login.
+    </div>
+  </div>
+
+  <!-- PANEL -->
+  <div id="panel" class="hidden space-y-6">
+
+    <!-- INFO PIC -->
+    <div class="card bg-white rounded-3xl p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <div class="text-sm text-slate-500">Sedang login sebagai</div>
+          <div class="text-2xl font-extrabold" id="picName">-</div>
+          <div class="text-xs text-slate-500 mt-1" id="picUsername">-</div>
+        </div>
+
+        <div class="md:text-right">
+          <div class="text-sm text-slate-500">Layanan</div>
+          <div class="text-lg font-extrabold text-blue-700" id="picLayanan">-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE -->
+    <div class="card bg-white rounded-3xl p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        <div>
+          <h2 class="text-xl font-extrabold">Pengaturan Jadwal Layanan</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            Atur jam mulai/selesai dan status aktif layanan.
+          </p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-4 mt-4">
+        <div>
+          <label class="text-sm font-bold">Jam Mulai</label>
+          <input id="startTime" type="time" class="mt-2 w-full border rounded-xl px-4 py-3" />
+        </div>
+        <div>
+          <label class="text-sm font-bold">Jam Selesai</label>
+          <input id="endTime" type="time" class="mt-2 w-full border rounded-xl px-4 py-3" />
+        </div>
+        <div>
+          <label class="text-sm font-bold">Status</label>
+          <select id="aktifSelect" class="mt-2 w-full border rounded-xl px-4 py-3 bg-white">
+            <option value="YES">YES (Aktif)</option>
+            <option value="NO">NO (Nonaktif)</option>
+          </select>
+        </div>
+      </div>
+
+      <button id="saveScheduleBtn"
+        class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-xl font-extrabold hover:bg-blue-700 transition">
+        Simpan Perubahan
+      </button>
+
+      <div id="scheduleMsg" class="mt-4"></div>
+    </div>
+
+    <!-- BOOKING -->
+    <div class="card bg-white rounded-3xl p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+        <div>
+          <h2 class="text-xl font-extrabold">Daftar Booking</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            Pilih tanggal, muat data, lalu update status kunjungan.
+          </p>
+        </div>
+
+        <!-- FILTER STATUS -->
+        <div class="flex items-center gap-3">
+          <label class="text-sm font-bold text-slate-600">Filter Status</label>
+          <select id="statusFilter" class="border rounded-xl px-4 py-2 text-sm font-semibold bg-white">
+            <option value="ALL">Semua</option>
+            <option value="Booked">Booked</option>
+            <option value="Hadir">Hadir</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Batal">Batal</option>
+            <option value="No-show">No-show</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row md:items-center gap-4 mb-4">
+        <div class="w-full md:w-auto">
+          <label class="text-sm font-bold text-slate-600">Tanggal</label>
+          <input type="date" id="filterTanggal" class="mt-2 border rounded-xl px-4 py-3 w-full md:w-[220px] bg-white" />
+        </div>
+
+        <button id="loadBookingBtn"
+          class="mt-6 md:mt-7 bg-blue-600 text-white px-6 py-3 rounded-xl font-extrabold hover:bg-blue-700 transition w-full md:w-auto">
+          Muat Data
+        </button>
+      </div>
+
+      <div id="bookingMsg" class="mb-4"></div>
+
+      <div class="overflow-auto rounded-2xl border border-slate-200">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-100">
+            <tr>
+              <th class="px-4 py-3 text-left font-extrabold text-slate-700">Slot</th>
+              <th class="px-4 py-3 text-left font-extrabold text-slate-700">Nama</th>
+              <th class="px-4 py-3 text-left font-extrabold text-slate-700">NIP</th>
+              <th class="px-4 py-3 text-left font-extrabold text-slate-700">Status</th>
+              <th class="px-4 py-3 text-left font-extrabold text-slate-700">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="bookingTable" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 text-xs text-slate-500">
+        Catatan: Setelah klik <b>Simpan</b>, status akan tersimpan di sistem dan tabel akan menyesuaikan filter.
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+/** GANTI jika URL web app berubah */
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyd1cad_iYSgUmqKhtP74NMhnGpO1nQjYmFyG8TTJWtuoXCs4elylvCHdS1exDHgdBu/exec";
+
+let currentLayanan = "";
+let currentUsername = "";
+let currentPassword = "";
+let lastLoadedRows = []; // untuk filter status tanpa re-fetch
+
+async function api(payload, timeoutMs = 15000) {
+  const controller = new AbortController();
+  const t = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const res = await fetch(ENDPOINT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(payload),
+      signal: controller.signal
+    });
+    return await res.json();
+  } finally {
+    clearTimeout(t);
+  }
+}
+
+function showMsg(el, msg, type = "error") {
+  if (!el) return;
+  const cls = type === "success"
+    ? "bg-green-50 border-green-200 text-green-800"
+    : "bg-red-50 border-red-200 text-red-800";
+  el.innerHTML = `<div class="${cls} border p-3 rounded-xl text-sm">${msg}</div>`;
+}
+
+function clearMsg(el){ if(el) el.innerHTML = ""; }
+
+function renderTable(rows){
+  const tbody = document.getElementById("bookingTable");
+  tbody.innerHTML = "";
+
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-6 text-center text-slate-500">Tidak ada data untuk ditampilkan.</td></tr>`;
+    return;
+  }
+
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="px-4 py-3 whitespace-nowrap">${r.slot || "-"}</td>
+      <td class="px-4 py-3">${r.nama || "-"}</td>
+      <td class="px-4 py-3 whitespace-nowrap">${r.nip || "-"}</td>
+      <td class="px-4 py-3">
+        <select data-code="${r.bookingCode}" class="statusSel border rounded-xl px-3 py-2 bg-white">
+          ${["Booked","Hadir","Selesai","Batal","No-show"].map(s =>
+            `<option value="${s}" ${r.status===s ? "selected" : ""}>${s}</option>`
+          ).join("")}
+        </select>
+      </td>
+      <td class="px-4 py-3 whitespace-nowrap">
+        <button data-code="${r.bookingCode}" class="updateBtn bg-blue-600 text-white px-4 py-2 rounded-xl font-extrabold hover:bg-blue-700">
+          Simpan
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.querySelectorAll(".updateBtn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const code = btn.dataset.code;
+      const status = document.querySelector(`select[data-code="${code}"]`).value;
+
+      try {
+        const resp = await api({
+          action: "pic_update_status",
+          layanan: currentLayanan,
+          username: currentUsername,
+          password: currentPassword,
+          bookingCode: code,
+          status
+        });
+
+        if (!resp.ok) return alert(resp.message || "Gagal update status.");
+        alert("Status diperbarui.");
+
+        lastLoadedRows = lastLoadedRows.map(x => x.bookingCode === code ? { ...x, status } : x);
+        applyStatusFilter();
+      } catch (e) {
+        alert("Gagal menghubungi server.");
+      }
+    });
+  });
+}
+
+function applyStatusFilter(){
+  const status = document.getElementById("statusFilter").value;
+  const rows = (status === "ALL")
+    ? lastLoadedRows
+    : lastLoadedRows.filter(r => r.status === status);
+
+  renderTable(rows);
+}
+
+/** LOAD SERVICES */
+async function loadServices() {
+  const select = document.getElementById("loginLayanan");
+  try {
+    const data = await api({ action: "get_services" });
+    if (!data.ok) {
+      select.innerHTML = `<option value="">(Gagal memuat layanan)</option>`;
+      return;
+    }
+    select.innerHTML = `<option value="">-- Pilih Layanan --</option>`;
+    (data.services || []).forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s.layanan;
+      opt.textContent = s.layanan;
+      select.appendChild(opt);
+    });
+  } catch (e) {
+    select.innerHTML = `<option value="">(Gagal memuat layanan)</option>`;
+  }
+}
+
+document.getElementById("refreshServicesBtn").addEventListener("click", loadServices);
+
+/** LOGIN */
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const layanan = document.getElementById("loginLayanan").value;
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+  const msg = document.getElementById("loginMsg");
+
+  clearMsg(msg);
+
+  if (!layanan) return showMsg(msg, "Silakan pilih layanan.");
+  if (!username) return showMsg(msg, "Username wajib diisi.");
+  if (!password) return showMsg(msg, "Password wajib diisi.");
+
+  try {
+    const data = await api({ action: "pic_login", layanan, username, password });
+    if (!data.ok) return showMsg(msg, data.message || "Login gagal.");
+
+    currentLayanan = layanan;
+    currentUsername = username;
+    currentPassword = password;
+
+    document.getElementById("loginCard").classList.add("hidden");
+    document.getElementById("panel").classList.remove("hidden");
+    document.getElementById("logoutBtn").classList.remove("hidden");
+
+    const picName = data.nama_pic || username;
+    const layananName = data.layanan || layanan;
+
+    document.getElementById("picName").textContent = picName;
+    document.getElementById("picUsername").textContent = `Username: ${username}`;
+    document.getElementById("picLayanan").textContent = layananName;
+
+    // header badge
+    document.getElementById("headerBadge").classList.remove("hidden");
+    document.getElementById("headerPic").textContent = `PIC: ${picName}`;
+    document.getElementById("headerLayanan").textContent = `Layanan: ${layananName}`;
+
+    document.getElementById("startTime").value = data.start_time || "";
+    document.getElementById("endTime").value = data.end_time || "";
+    document.getElementById("aktifSelect").value = data.aktif || "YES";
+
+    const now = new Date();
+    const y = now.getFullYear();
+    const m = String(now.getMonth() + 1).padStart(2, "0");
+    const d = String(now.getDate()).padStart(2, "0");
+    document.getElementById("filterTanggal").value = `${y}-${m}-${d}`;
+
+  } catch (e) {
+    showMsg(msg, "Tidak bisa menghubungi server. Pastikan ENDPOINT_URL benar & sudah deploy.");
+  }
+});
+
+/** LOGOUT */
+document.getElementById("logoutBtn").addEventListener("click", () => location.reload());
+
+/** UPDATE SCHEDULE */
+document.getElementById("saveScheduleBtn").addEventListener("click", async () => {
+  const start_time = document.getElementById("startTime").value;
+  const end_time = document.getElementById("endTime").value;
+  const aktif = document.getElementById("aktifSelect").value;
+  const msg = document.getElementById("scheduleMsg");
+
+  clearMsg(msg);
+
+  try {
+    const data = await api({
+      action: "pic_update_schedule",
+      layanan: currentLayanan,
+      username: currentUsername,
+      password: currentPassword,
+      start_time,
+      end_time,
+      aktif
+    });
+
+    if (!data.ok) return showMsg(msg, data.message || "Gagal update jadwal.");
+    showMsg(msg, "Jadwal berhasil diperbarui.", "success");
+  } catch (e) {
+    showMsg(msg, "Gagal menghubungi server.");
+  }
+});
+
+/** LOAD BOOKINGS */
+document.getElementById("loadBookingBtn").addEventListener("click", async () => {
+  const tanggal = document.getElementById("filterTanggal").value;
+  const msg = document.getElementById("bookingMsg");
+
+  clearMsg(msg);
+  document.getElementById("bookingTable").innerHTML = "";
+  lastLoadedRows = [];
+
+  if (!tanggal) return showMsg(msg, "Tanggal wajib dipilih.");
+
+  try {
+    const data = await api({
+      action: "pic_list",
+      layanan: currentLayanan,
+      username: currentUsername,
+      password: currentPassword,
+      tanggal
+    });
+
+    if (!data.ok) return showMsg(msg, data.message || "Gagal memuat data.");
+
+    lastLoadedRows = data.rows || [];
+    if (lastLoadedRows.length === 0) {
+      renderTable([]);
+      return showMsg(msg, "Belum ada booking pada tanggal tersebut.", "success");
+    }
+
+    showMsg(msg, `Ditemukan ${lastLoadedRows.length} booking.`, "success");
+    applyStatusFilter();
+
+  } catch (e) {
+    showMsg(msg, "Gagal menghubungi server.");
+  }
+});
+
+/** FILTER STATUS CHANGE (tanpa re-fetch) */
+document.getElementById("statusFilter").addEventListener("change", applyStatusFilter);
+
+loadServices();
+</script>
+
+</body>
+</html>

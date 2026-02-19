@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SI-MANJA — Sistem Manajemen Kunjungan BKPSDM</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    html { scroll-behavior: smooth; }
+    .card {
+      border: 1px solid rgba(148,163,184,0.22);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+
+  <!-- TOP INFO BAR -->
+  <div class="bg-blue-600 text-white">
+    <div class="max-w-6xl mx-auto px-6 py-2 text-xs md:text-sm flex flex-col md:flex-row gap-1 md:gap-6 justify-between">
+      <div class="opacity-95">SI-MANJA — Sistem Manajemen Kunjungan BKPSDM (kurangi antrian, layanan lebih tertib).</div>
+      <div class="opacity-95">Jam layanan mengikuti jadwal tiap layanan (diatur Admin/PIC).</div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between gap-6">
+      <a href="index.html" class="flex items-center gap-3 min-w-[220px]">
+        <img src="assets/logo1.png" alt="Logo Kabupaten" class="h-11 w-auto object-contain" />
+        <div class="leading-tight">
+          <div class="font-extrabold text-slate-900 tracking-tight">SI-MANJA</div>
+          <div class="text-[11px] text-slate-500 font-semibold -mt-0.5">Sistem Manajemen Kunjungan • BKPSDM</div>
+        </div>
+      </a>
+
+      <!-- anchors in tentang.html -->
+      <div class="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-600">
+        <a href="#layanan" class="hover:text-blue-600">Layanan</a>
+        <a href="#alur" class="hover:text-blue-600">Alur</a>
+        <a href="#ketentuan" class="hover:text-blue-600">Ketentuan</a>
+        <a href="#faq" class="hover:text-blue-600">FAQ</a>
+        <a href="tentang.html" class="hover:text-slate-900">Tentang</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="cek-booking.html"
+           class="inline-flex h-10 px-4 items-center justify-center rounded-xl border border-slate-200 bg-white font-bold hover:bg-slate-50 transition">
+          Cek Booking
+        </a>
+        <a href="booking.html"
+           class="inline-flex h-10 px-4 items-center justify-center rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
+          Booking
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-6 py-10">
+
+    <!-- HERO (Tentang Aplikasi) -->
+    <section id="beranda" class="card bg-white rounded-[28px] p-6 md:p-10">
+      <div class="grid md:grid-cols-12 gap-8 items-center">
+
+        <!-- Left: SI-MANJA wordmark -->
+        <div class="md:col-span-5">
+          <div class="relative">
+            <div class="absolute -inset-3 bg-blue-600/10 rounded-[28px] blur-2xl"></div>
+            <div class="relative bg-white rounded-3xl border border-slate-200 p-6">
+              <img src="assets/simanja-logo.svg" alt="SI-MANJA" class="w-full h-auto" />
+              <div class="mt-4 flex flex-wrap gap-2">
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-blue-50 text-blue-800 border border-blue-100">Sistem Manajemen Kunjungan</span>
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-slate-50 text-slate-800 border border-slate-200">Tertib</span>
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-slate-50 text-slate-800 border border-slate-200">Transparan</span>
+                <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-slate-50 text-slate-800 border border-slate-200">Terjadwal</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Description -->
+        <div class="md:col-span-7">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-extrabold">
+            <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+            Tentang Aplikasi
+          </div>
+
+          <h1 class="mt-4 text-4xl md:text-5xl font-extrabold tracking-tight">
+            SI-MANJA
+            <span class="block text-blue-600">BKPSDM</span>
+          </h1>
+
+          <p class="mt-4 text-slate-700 leading-relaxed">
+            <span class="font-semibold text-slate-900">SI-MANJA (Sistem Manajemen Kunjungan)</span> adalah sistem digital
+            untuk mengatur kunjungan layanan kepegawaian BKPSDM agar lebih <span class="font-semibold">tertib</span>,
+            mengurangi <span class="font-semibold">penumpukan</span>, dan membantu pemohon memperoleh <span class="font-semibold">kepastian waktu pelayanan</span>.
+          </p>
+
+          <div class="mt-6 p-5 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="text-sm font-extrabold">Manfaat utama</div>
+            <ul class="mt-2 text-sm text-slate-700 list-disc list-inside space-y-1">
+              <li>Booking terjadwal (tanggal & slot) sesuai layanan.</li>
+              <li>Status layanan tercatat: Booked / Hadir / Selesai / Batal / No-show.</li>
+              <li>Monitoring admin & PIC lebih mudah dengan filter data.</li>
+            </ul>
+          </div>
+
+          <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <a href="booking.html"
+               class="inline-flex items-center justify-center h-12 px-6 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
+              Mulai Booking
+            </a>
+            <a href="#alur"
+               class="inline-flex items-center justify-center h-12 px-6 rounded-xl border border-slate-200 bg-white font-bold hover:bg-slate-50 transition">
+              Lihat Alur
+            </a>
+          </div>
+
+          <p class="mt-4 text-xs text-slate-500">
+            * Jam layanan & status aktif/nonaktif diatur oleh Admin/PIC sesuai kebutuhan.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ SECTION: Penggagas Aplikasi (Latsar CPNS) -->
+    <section id="latsar" class="mt-10">
+      <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white">
+        <div class="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-blue-200/40 blur-3xl"></div>
+        <div class="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-emerald-200/40 blur-3xl"></div>
+
+        <div class="relative p-7 md:p-10">
+          <div class="grid md:grid-cols-12 gap-8 items-center">
+
+            <!-- LEFT: deskripsi -->
+            <div class="md:col-span-7">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-extrabold">
+                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                Aktualisasi Latsar CPNS 2026
+              </div>
+
+              <h2 class="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight">
+                SI-MANJA lahir dari ide Latsar CPNS
+              </h2>
+
+              <p class="mt-4 text-slate-700 leading-relaxed">
+                SI-MANJA dikembangkan sebagai bagian dari <span class="font-semibold text-slate-900">Aktualisasi Latsar CPNS</span>
+                untuk mendorong perbaikan layanan berbasis digital. Fokusnya: layanan lebih <span class="font-semibold">tertib</span>,
+                <span class="font-semibold">transparan</span>, dan berorientasi pada <span class="font-semibold">kepastian waktu</span>.
+              </p>
+
+              <div class="mt-5 grid sm:grid-cols-3 gap-3">
+                <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div class="text-sm font-extrabold">Tertib</div>
+                  <div class="text-xs text-slate-500 mt-1">jadwal terstruktur</div>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div class="text-sm font-extrabold">Akuntabel</div>
+                  <div class="text-xs text-slate-500 mt-1">rekam status layanan</div>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-4">
+                  <div class="text-sm font-extrabold">Humanis</div>
+                  <div class="text-xs text-slate-500 mt-1">tanpa penumpukan</div>
+                </div>
+              </div>
+
+              <div class="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                <div class="text-sm font-extrabold">Tujuan Aktualisasi</div>
+                <p class="mt-2 text-sm text-slate-600 leading-relaxed">
+                  Mengubah proses layanan yang sebelumnya bergantung pada antrian/manual menjadi sistem digital yang rapi dan terjadwal,
+                  sehingga petugas dapat menyiapkan layanan lebih baik dan pemohon memperoleh kepastian waktu pelayanan.
+                </p>
+              </div>
+            </div>
+
+            <!-- RIGHT: foto + identitas -->
+            <div class="md:col-span-5">
+              <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white">
+                <img src="assets/teman-latsar.jpg" alt="PUTRA NURAN SAKTI H, S.Kom" class="w-full h-[360px] md:h-[420px] object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/20 to-transparent"></div>
+
+                <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <div class="text-xl font-extrabold leading-tight">PUTRA NURAN SAKTI H, S.Kom</div>
+                  <div class="text-sm opacity-90 mt-1">NIP: 19970419 202506 1 002</div>
+                  <div class="text-sm opacity-90">UPD: Badan Kepegawaian dan Pengembangan Sumber Daya Manusia</div>
+                  <div class="text-sm opacity-90">Latsar CPNS 2026 • Angkatan 4</div>
+                </div>
+              </div>
+              <p class="mt-2 text-xs text-slate-500">
+                Penggagas SI-MANJA sebagai bagian dari aktualisasi nilai ASN.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ SECTION: IDENTITAS (UPGRADED) -->
+    <section class="mt-10">
+      <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white">
+        <div class="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-blue-200/40 blur-3xl"></div>
+        <div class="absolute -bottom-24 -right-24 w-72 h-72 rounded-full bg-emerald-200/40 blur-3xl"></div>
+
+        <div class="relative p-7 md:p-10">
+          <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div class="max-w-2xl">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-xs font-extrabold">
+                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                Identitas & Budaya Pelayanan
+              </div>
+
+              <h2 class="mt-4 text-3xl md:text-4xl font-extrabold tracking-tight">
+                Identitas Daerah & Nilai Pelayanan
+              </h2>
+
+              <p class="mt-3 text-slate-700 leading-relaxed">
+                SI-MANJA hadir untuk mendukung layanan BKPSDM yang lebih <span class="font-semibold text-slate-900">tertib</span>,
+                <span class="font-semibold text-slate-900">transparan</span>, dan <span class="font-semibold text-slate-900">berorientasi solusi</span>.
+                Nilai “Bangga Melayani Bangsa” dan “BerAKHLAK” diterjemahkan ke fitur: jadwal jelas, kuota slot, dan monitoring status.
+              </p>
+            </div>
+
+            <!-- ✅ Highlight pills (pengganti kartu Tertib/Cepat/Nyaman) -->
+<div class="flex flex-wrap gap-2 w-full md:w-auto md:justify-end">
+  <div class="px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-slate-200">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+      <span class="font-extrabold text-slate-900">Tertib</span>
+      <span class="text-xs font-semibold text-slate-500">jadwal jelas</span>
+    </div>
+  </div>
+
+  <div class="px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-slate-200">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+      <span class="font-extrabold text-slate-900">Cepat</span>
+      <span class="text-xs font-semibold text-slate-500">slot terukur</span>
+    </div>
+  </div>
+
+  <div class="px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-slate-200">
+    <div class="flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+      <span class="font-extrabold text-slate-900">Nyaman</span>
+      <span class="text-xs font-semibold text-slate-500">tanpa menumpuk</span>
+    </div>
+  </div>
+</div>
+
+          </div>
+
+          <div class="mt-8 grid lg:grid-cols-12 gap-6 items-stretch">
+            <div class="lg:col-span-7 grid sm:grid-cols-3 gap-4">
+              <div class="group rounded-3xl border border-slate-200 bg-white p-4 hover:shadow-lg transition">
+                <div class="text-sm font-extrabold text-slate-900">Luwu Timur Juara</div>
+                <div class="text-xs text-slate-500 mt-1">Semangat daerah untuk layanan terbaik</div>
+                <div class="mt-4 rounded-2xl bg-slate-50 border border-slate-200 p-3">
+                  <img src="assets/lutim-juara.png" alt="Luwu Timur Juara" class="w-full h-28 object-contain rounded-xl bg-white" />
+                </div>
+                <div class="mt-4 flex items-center gap-2 text-xs text-slate-600">
+                  <span class="px-2 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 font-bold">Identitas</span>
+                  <span>kualitas & inovasi</span>
+                </div>
+              </div>
+
+              <div class="group rounded-3xl border border-slate-200 bg-white p-4 hover:shadow-lg transition">
+                <div class="text-sm font-extrabold text-slate-900">Bangga Melayani Bangsa</div>
+                <div class="text-xs text-slate-500 mt-1">Pelayanan publik sebagai kehormatan</div>
+                <div class="mt-4 rounded-2xl bg-slate-50 border border-slate-200 p-3">
+                  <img src="assets/bangga.png" alt="Bangga Melayani Bangsa" class="w-full h-28 object-contain rounded-xl bg-white" />
+                </div>
+                <div class="mt-4 flex items-center gap-2 text-xs text-slate-600">
+                  <span class="px-2 py-1 rounded-full bg-rose-50 border border-rose-100 text-rose-700 font-bold">Semangat</span>
+                  <span>responsif & ramah</span>
+                </div>
+              </div>
+
+              <div class="group rounded-3xl border border-slate-200 bg-white p-4 hover:shadow-lg transition">
+                <div class="text-sm font-extrabold text-slate-900">BerAKHLAK</div>
+                <div class="text-xs text-slate-500 mt-1">Nilai ASN untuk layanan yang dipercaya</div>
+                <div class="mt-4 rounded-2xl bg-slate-50 border border-slate-200 p-3">
+                  <img src="assets/berakhlak.png" alt="BerAKHLAK" class="w-full h-28 object-contain rounded-xl bg-white" />
+                </div>
+                <div class="mt-4 flex items-center gap-2 text-xs text-slate-600">
+                  <span class="px-2 py-1 rounded-full bg-amber-50 border border-amber-100 text-amber-700 font-bold">Budaya</span>
+                  <span>akurat & solutif</span>
+                </div>
+              </div>
+
+              <div class="sm:col-span-3 rounded-3xl border border-slate-200 bg-white p-5">
+                <div class="font-extrabold text-slate-900">Nilai yang diterapkan dalam SI-MANJA</div>
+                <p class="text-sm text-slate-600 mt-2">
+                  Bukan cuma slogan—nilai ini diterjemahkan menjadi fitur: jadwal jelas, kuota slot, dan monitoring status layanan.
+                </p>
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800">Transparan</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800">Akuntabel</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800">Tepat Waktu</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800">Berorientasi Layanan</span>
+                  <span class="px-3 py-1 rounded-full text-xs font-bold bg-slate-100 text-slate-800">Humanis</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:col-span-5">
+              <div class="relative overflow-hidden rounded-3xl border border-slate-200 bg-white h-full">
+                <img src="assets/bkpsdm.jpeg" alt="BKPSDM" class="w-full h-full object-cover" />
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-slate-900/10 to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-6">
+                  <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/90 border border-white/60 text-slate-900 text-xs font-extrabold">
+                    BKPSDM Luwu Timur
+                  </div>
+                  <div class="mt-3 text-white">
+                    <div class="text-xl font-extrabold leading-tight">“Pelayanan yang baik dimulai dari jadwal yang tertib.”</div>
+                    <div class="text-sm opacity-90 mt-2">
+                      SI-MANJA membantu pemohon dan petugas bertemu di waktu yang tepat—tanpa penumpukan.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="mt-2 text-xs text-slate-500">Foto/visual instansi (opsional). Bisa diganti sesuai kebutuhan.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ SECTION: LAYANAN (anchor) -->
+    <section id="layanan" class="mt-10">
+      <div class="card bg-white rounded-3xl p-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+          <div>
+            <h2 class="text-2xl font-extrabold">Layanan</h2>
+            <p class="mt-2 text-slate-600 text-sm">
+              Pemohon memilih layanan, tanggal, dan slot waktu yang tersedia sesuai jadwal layanan.
+            </p>
+          </div>
+          <a href="booking.html" class="inline-flex h-10 px-4 items-center justify-center rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
+            Booking Sekarang
+          </a>
+        </div>
+
+        <div class="mt-6 grid md:grid-cols-3 gap-6">
+          <div class="card bg-white rounded-2xl p-6">
+            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-extrabold">1</div>
+            <h3 class="mt-4 font-extrabold text-lg">Booking Online</h3>
+            <p class="mt-2 text-slate-600 text-sm leading-relaxed">Pilih layanan, tanggal, dan slot sesuai jadwal yang tersedia.</p>
+          </div>
+
+          <div class="card bg-white rounded-2xl p-6">
+            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-extrabold">2</div>
+            <h3 class="mt-4 font-extrabold text-lg">Cek Jadwal</h3>
+            <p class="mt-2 text-slate-600 text-sm leading-relaxed">Cek booking aktif menggunakan NIP untuk memastikan jadwal kunjungan.</p>
+          </div>
+
+          <div class="card bg-white rounded-2xl p-6">
+            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-extrabold">3</div>
+            <h3 class="mt-4 font-extrabold text-lg">Admin & PIC</h3>
+            <p class="mt-2 text-slate-600 text-sm leading-relaxed">Admin monitoring data, PIC mengatur jam layanan dan update status booking.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ SECTION: ALUR (anchor) -->
+    <section id="alur" class="mt-10">
+      <div class="card bg-white rounded-3xl p-8">
+        <h2 class="text-2xl font-extrabold">Alur</h2>
+        <p class="mt-2 text-slate-600 text-sm">Ringkasan alur penggunaan untuk pemohon dan petugas.</p>
+
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="text-sm font-extrabold">Untuk Pemohon</div>
+            <ol class="mt-3 space-y-2 text-sm text-slate-700 list-decimal list-inside">
+              <li>Buka halaman <span class="font-semibold">Booking</span></li>
+              <li>Isi identitas & pilih layanan</li>
+              <li>Pilih tanggal dan slot yang tersedia</li>
+              <li>Kirim booking, simpan kode booking</li>
+              <li>Cek ulang jadwal di <span class="font-semibold">Cek Booking</span> pakai NIP</li>
+            </ol>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200">
+            <div class="text-sm font-extrabold">Untuk Admin / PIC</div>
+            <ol class="mt-3 space-y-2 text-sm text-slate-700 list-decimal list-inside">
+              <li>Admin menambahkan PIC sesuai layanan</li>
+              <li>PIC mengatur jam mulai/selesai layanan</li>
+              <li>PIC memantau daftar booking per tanggal</li>
+              <li>Update status booking</li>
+              <li>Admin memonitor keseluruhan data</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ SECTION: KETENTUAN (anchor) -->
+    <section id="ketentuan" class="mt-10">
+      <div class="card bg-white rounded-3xl p-8">
+        <h2 class="text-2xl font-extrabold">Ketentuan</h2>
+        <p class="mt-2 text-slate-600 text-sm">Aturan umum agar layanan tertib dan tepat waktu.</p>
+
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
+          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-5">
+            <div class="font-extrabold text-sm">Ketentuan Umum</div>
+            <ul class="mt-3 space-y-2 text-sm text-slate-700 list-disc list-inside">
+              <li>Datang sesuai jadwal dan tunjukkan <b>kode booking</b>.</li>
+              <li>Disarankan datang 5–10 menit lebih awal.</li>
+              <li>Booking hanya untuk hari kerja (weekend tidak tersedia).</li>
+              <li>Jika slot penuh, pilih slot/tanggal lain yang tersedia.</li>
+            </ul>
+          </div>
+
+          <div class="rounded-2xl bg-slate-50 border border-slate-200 p-5">
+            <div class="font-extrabold text-sm">Status Booking</div>
+            <ul class="mt-3 space-y-2 text-sm text-slate-700 list-disc list-inside">
+              <li><b>Booked</b> = terjadwal</li>
+              <li><b>Hadir</b> = pemohon datang</li>
+              <li><b>Selesai</b> = layanan selesai diproses</li>
+              <li><b>Batal</b> = dibatalkan</li>
+              <li><b>No-show</b> = tidak hadir</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ SECTION: FAQ (anchor) -->
+    <section id="faq" class="mt-10">
+      <div class="card bg-white rounded-3xl p-8">
+        <h2 class="text-2xl font-extrabold">FAQ</h2>
+        <p class="mt-2 text-slate-600 text-sm">Pertanyaan yang sering ditanyakan.</p>
+
+        <div class="mt-6 grid md:grid-cols-2 gap-6">
+          <div class="card bg-white rounded-2xl p-6">
+            <h3 class="font-extrabold text-lg">Apakah layanan bisa ditutup sementara?</h3>
+            <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+              Bisa. Admin/PIC dapat mengubah status layanan menjadi nonaktif sehingga slot tidak muncul pada halaman booking.
+            </p>
+          </div>
+
+          <div class="card bg-white rounded-2xl p-6">
+            <h3 class="font-extrabold text-lg">Bagaimana kalau slot penuh?</h3>
+            <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+              Slot yang sudah terisi tidak bisa dipilih. Pemohon dapat memilih slot lain atau tanggal lain yang tersedia.
+            </p>
+          </div>
+
+          <div class="card bg-white rounded-2xl p-6">
+            <h3 class="font-extrabold text-lg">Bagaimana cara cek booking?</h3>
+            <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+              Buka halaman <b>Cek Booking</b>, masukkan NIP yang sama saat booking. Booking aktif akan tampil.
+            </p>
+          </div>
+
+          <div class="card bg-white rounded-2xl p-6">
+            <h3 class="font-extrabold text-lg">Apakah admin bisa monitoring semua booking?</h3>
+            <p class="mt-2 text-slate-600 text-sm leading-relaxed">
+              Bisa. Admin dapat memfilter berdasarkan rentang tanggal, layanan, status, dan NIP.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+          <a href="cek-booking.html" class="inline-flex h-12 px-6 items-center justify-center rounded-xl border border-slate-200 bg-white font-bold hover:bg-slate-50 transition">
+            Cek Booking
+          </a>
+          <a href="booking.html" class="inline-flex h-12 px-6 items-center justify-center rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
+            Booking
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-14 border-t border-slate-200 bg-white">
+    <div class="max-w-6xl mx-auto px-6 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="text-sm text-slate-600">
+        © <span id="year"></span> SI-MANJA — Sistem Manajemen Kunjungan BKPSDM
+      </div>
+      <div class="text-xs text-slate-500">
+        Dibuat untuk peningkatan kualitas layanan (Aktualisasi Latsar CPNS 2026 • Angkatan 4).
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

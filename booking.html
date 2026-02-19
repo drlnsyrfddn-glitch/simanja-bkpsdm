@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SI-MANJA — Form Booking</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .card {
+      border: 1px solid rgba(148,163,184,0.22);
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+
+  <!-- Top Notice -->
+  <div class="bg-blue-600 text-white">
+    <div class="max-w-6xl mx-auto px-6 py-2 text-xs md:text-sm flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+      <div class="opacity-95">
+        SI-MANJA (Sistem Manajemen Kunjungan) — booking kunjungan agar layanan lebih tertib.
+      </div>
+      <div class="opacity-95">
+        Jam layanan mengikuti jadwal tiap layanan (diatur Admin/PIC).
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <img
+          src="assets/logo1.png"
+          alt="Logo Kabupaten Luwu Timur"
+          class="h-12 w-auto object-contain"
+        />
+
+        <div class="leading-tight">
+          <div class="font-extrabold text-slate-900 tracking-tight">SI-MANJA</div>
+          <div class="text-xs text-slate-500 -mt-0.5 font-semibold">
+            Sistem Manajemen Kunjungan • BKPSDM
+          </div>
+        </div>
+      </a>
+
+      <div class="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-600">
+        <a href="tentang.html#layanan" class="hover:text-blue-600">Layanan</a>
+        <a href="tentang.html#alur" class="hover:text-blue-600">Alur</a>
+        <a href="tentang.html#ketentuan" class="hover:text-blue-600">Ketentuan</a>
+        <a href="tentang.html#faq" class="hover:text-blue-600">FAQ</a>
+        <a href="tentang.html" class="hover:text-slate-900">Tentang</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="cek-booking.html"
+           class="inline-flex px-4 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
+          Cek Booking
+        </a>
+        <a href="index.html"
+           class="inline-flex px-4 py-2 rounded-xl border border-slate-200 bg-white font-bold hover:bg-slate-50 transition">
+          Home
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-6 py-10">
+    <div class="mb-8">
+      <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">Buat Booking Kunjungan</h1>
+      <p class="mt-2 text-slate-600">
+        Pilih layanan dan tanggal terlebih dahulu, lalu slot akan muncul sesuai jadwal layanan tersebut.
+      </p>
+      <p id="jadwalInfo" class="mt-2 text-sm text-slate-600"></p>
+    </div>
+
+    <div class="bg-white rounded-3xl p-6 md:p-8 card">
+      <form id="bookingForm" class="space-y-5">
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label class="text-sm font-bold text-slate-700">Nama</label>
+            <input name="nama" required class="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="text-sm font-bold text-slate-700">NIP</label>
+            <input name="nip" required class="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label class="text-sm font-bold text-slate-700">OPD / Unit Kerja</label>
+            <input name="opd" required class="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+          </div>
+          <div>
+            <label class="text-sm font-bold text-slate-700">No. HP</label>
+            <input name="hp" required class="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label class="text-sm font-bold text-slate-700">Email</label>
+            <input name="email" required type="email" class="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+          </div>
+
+          <div>
+            <label class="text-sm font-bold text-slate-700">Layanan</label>
+            <select name="layanan" id="layananSelect" required
+              class="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500">
+              <option value="">Memuat layanan...</option>
+            </select>
+            <p class="mt-2 text-xs text-slate-500">Layanan ditarik dari sheet <b>services</b>.</p>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label class="text-sm font-bold text-slate-700">Tanggal Kunjungan</label>
+            <input name="tanggal" id="tanggalInput" type="date" required
+              class="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500" />
+            <p class="mt-2 text-xs text-slate-500">H sampai H+7, tidak melayani weekend.</p>
+          </div>
+
+          <div>
+            <label class="text-sm font-bold text-slate-700">Jam / Slot</label>
+            <select name="slot" id="slotSelect" required
+              class="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 bg-white focus:ring-2 focus:ring-blue-500">
+              <option value="">Pilih layanan & tanggal dulu</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label class="text-sm font-bold text-slate-700">Deskripsi Permasalahan</label>
+          <textarea name="keperluan" rows="3" required
+            class="mt-2 w-full rounded-2xl border border-slate-200 px-4 py-3 focus:ring-2 focus:ring-blue-500"></textarea>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 pt-2">
+          <button id="submitBtn" type="submit"
+            class="inline-flex items-center justify-center rounded-2xl bg-blue-600 text-white font-extrabold px-6 py-3 hover:bg-blue-700 transition">
+            Kirim Booking
+          </button>
+          <a href="index.html"
+            class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 font-bold text-slate-700 hover:bg-slate-50 transition">
+            Kembali
+          </a>
+        </div>
+
+        <div id="msg" class="pt-2"></div>
+      </form>
+    </div>
+  </main>
+
+<script>
+  const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbyd1cad_iYSgUmqKhtP74NMhnGpO1nQjYmFyG8TTJWtuoXCs4elylvCHdS1exDHgdBu/exec";
+
+  const form = document.getElementById("bookingForm");
+  const msg = document.getElementById("msg");
+  const submitBtn = document.getElementById("submitBtn");
+
+  const layananSelect = document.getElementById("layananSelect");
+  const slotSelect = document.getElementById("slotSelect");
+  const jadwalInfo = document.getElementById("jadwalInfo");
+  const tanggalInput = document.getElementById("tanggalInput");
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, (m) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    }[m]));
+  }
+
+  async function api(payload) {
+    const res = await fetch(ENDPOINT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain" },
+      body: JSON.stringify(payload),
+    });
+    return await res.json();
+  }
+
+  function setSlotDisabled(text) {
+    slotSelect.innerHTML = `<option value="">${text}</option>`;
+    slotSelect.disabled = true;
+  }
+
+  // tanggal rule (H s/d H+7 + blokir weekend UI)
+  (function initDateRules() {
+    const today = new Date();
+    tanggalInput.min = today.toISOString().split("T")[0];
+    const max = new Date(today); max.setDate(max.getDate() + 7);
+    tanggalInput.max = max.toISOString().split("T")[0];
+
+    tanggalInput.addEventListener("change", () => {
+      if (!tanggalInput.value) return;
+
+      const d = new Date(tanggalInput.value + "T00:00:00");
+      const day = d.getDay();
+      if (day === 0 || day === 6) {
+        alert("Tidak melayani weekend (Sabtu/Minggu).");
+        tanggalInput.value = "";
+        setSlotDisabled("Pilih layanan & tanggal dulu");
+        jadwalInfo.textContent = "";
+        return;
+      }
+
+      if (layananSelect.value) loadSlots();
+    });
+  })();
+
+  async function loadServices() {
+    layananSelect.innerHTML = `<option value="">Memuat layanan...</option>`;
+    setSlotDisabled("Pilih layanan & tanggal dulu");
+    jadwalInfo.textContent = "";
+
+    try {
+      const data = await api({ action: "get_services" });
+      if (!data.ok) throw new Error(data.message || "Gagal memuat layanan.");
+
+      const services = data.services || [];
+      layananSelect.innerHTML = `<option value="">-- Pilih Layanan --</option>`;
+      services.forEach(s => {
+        const opt = document.createElement("option");
+        opt.value = s.layanan;
+        opt.textContent = s.layanan;
+        opt.dataset.start = s.start_time || "";
+        opt.dataset.end = s.end_time || "";
+        opt.dataset.aktif = s.aktif || "YES";
+        layananSelect.appendChild(opt);
+      });
+
+    } catch (e) {
+      layananSelect.innerHTML = `<option value="">Gagal memuat layanan</option>`;
+      alert(e.message);
+    }
+  }
+
+  async function loadSlots() {
+    const layanan = layananSelect.value;
+    const tanggal = tanggalInput.value;
+
+    if (!layanan || !tanggal) {
+      setSlotDisabled("Pilih layanan & tanggal dulu");
+      jadwalInfo.textContent = "";
+      return;
+    }
+
+    slotSelect.innerHTML = `<option value="">Memuat slot...</option>`;
+    slotSelect.disabled = true;
+    jadwalInfo.textContent = "";
+
+    try {
+      const data = await api({ action: "get_slots", layanan, tanggal });
+      if (!data.ok) throw new Error(data.message || "Slot tidak tersedia.");
+
+      const slots = data.slots || [];
+      if (!slots.length) throw new Error("Slot tidak tersedia.");
+
+      slotSelect.innerHTML = `<option value="">-- Pilih Slot --</option>`;
+      slots.forEach(t => {
+        const opt = document.createElement("option");
+        opt.value = t;
+        opt.textContent = t;
+        slotSelect.appendChild(opt);
+      });
+      slotSelect.disabled = false;
+
+      const optSel = layananSelect.options[layananSelect.selectedIndex];
+      const st = optSel?.dataset?.start || "";
+      const en = optSel?.dataset?.end || "";
+      jadwalInfo.textContent = (st && en)
+        ? `Jadwal layanan ${layanan}: ${st} - ${en}`
+        : `Jadwal layanan ${layanan} berhasil dimuat.`;
+
+    } catch (e) {
+      setSlotDisabled("Slot tidak tersedia");
+      jadwalInfo.textContent = e.message;
+    }
+  }
+
+  layananSelect.addEventListener("change", () => {
+    setSlotDisabled("Pilih layanan & tanggal dulu");
+    jadwalInfo.textContent = "";
+    if (layananSelect.value && tanggalInput.value) loadSlots();
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    msg.innerHTML = "";
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Mengirim...";
+
+    const payload = Object.fromEntries(new FormData(form).entries());
+    payload.action = "create_booking";
+
+    try {
+      const data = await api(payload);
+
+      if (!data.ok) {
+        msg.innerHTML = `
+          <div class="mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-800">
+            <div class="font-extrabold">Gagal</div>
+            <div class="mt-1 text-sm">${escapeHtml(data.message || "Gagal membuat booking")}</div>
+          </div>`;
+        return;
+      }
+
+      msg.innerHTML = `
+        <div class="mt-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900">
+          <div class="font-extrabold text-lg">Booking berhasil ✅</div>
+          <div class="mt-2 text-sm">Kode Booking:</div>
+          <div class="mt-1 font-extrabold text-xl tracking-tight">${escapeHtml(data.bookingCode)}</div>
+          <div class="mt-3 text-sm text-emerald-900/90">
+            Simpan kode booking ini. Kamu juga bisa cek lewat menu <b>Cek Booking</b>.
+          </div>
+        </div>`;
+
+      form.reset();
+      setSlotDisabled("Pilih layanan & tanggal dulu");
+      jadwalInfo.textContent = "";
+      await loadServices();
+
+    } catch (err) {
+      msg.innerHTML = `
+        <div class="mt-4 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-rose-800">
+          <div class="font-extrabold">Error</div>
+          <div class="mt-1 text-sm">${escapeHtml(err.message)}</div>
+        </div>`;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Kirim Booking";
+    }
+  });
+
+  loadServices();
+</script>
+
+</body>
+</html>

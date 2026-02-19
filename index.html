@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SI-MANJA — Sistem Manajemen Kunjungan | BKPSDM</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .hero-bg {
+      background:
+        radial-gradient(1000px 400px at 20% 10%, rgba(37, 99, 235, 0.18), transparent 60%),
+        radial-gradient(900px 500px at 90% 20%, rgba(16, 185, 129, 0.16), transparent 55%),
+        linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+    .glass {
+      background: rgba(255,255,255,0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(148,163,184,0.25);
+    }
+    .card {
+      border: 1px solid rgba(148,163,184,0.22);
+      box-shadow: 0 8px 28px rgba(15, 23, 42, 0.06);
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+
+  <!-- Top Notice -->
+  <div class="bg-blue-600 text-white">
+    <div class="max-w-6xl mx-auto px-6 py-2 text-sm flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+      <div class="opacity-95">
+        SI-MANJA (Sistem Manajemen Kunjungan) — kurangi antrian, layanan lebih tertib.
+      </div>
+      <div class="opacity-95">
+        Jam layanan mengikuti jadwal tiap layanan (diatur Admin/PIC).
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
+    <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <!-- Logo Kabupaten -->
+        <img
+          src="assets/logo1.png"
+          alt="Logo Kabupaten Luwu Timur"
+          class="h-12 w-auto object-contain"
+        />
+
+        <!-- Brand -->
+        <div class="leading-tight">
+          <div class="font-extrabold text-slate-900">SI-MANJA</div>
+          <div class="text-xs text-slate-500 -mt-0.5">
+            Sistem Manajemen Kunjungan • BKPSDM
+          </div>
+        </div>
+      </a>
+
+      <div class="hidden md:flex items-center gap-7 text-sm font-semibold text-slate-600">
+        <a href="tentang.html#layanan" class="hover:text-blue-600">Layanan</a>
+        <a href="tentang.html#alur" class="hover:text-blue-600">Alur</a>
+        <a href="tentang.html#ketentuan" class="hover:text-blue-600">Ketentuan</a>
+        <a href="tentang.html#faq" class="hover:text-blue-600">FAQ</a>
+        <a href="tentang.html" class="hover:text-slate-900">Tentang</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="tentang.html#faq" class="hidden md:inline-flex px-4 py-2 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 transition">
+          Bantuan
+        </a>
+        <a href="booking.html" class="inline-flex px-4 py-2 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition">
+          Buat Janji Temu
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section id="beranda" class="hero-bg">
+    <div class="max-w-6xl mx-auto px-6 py-14 md:py-20 grid md:grid-cols-2 gap-10 items-center">
+      <div class="space-y-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-50 text-blue-700 text-xs font-bold border border-blue-100">
+          <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+          Layanan lebih rapi • Data kunjungan tercatat • Tanpa penumpukan
+        </div>
+
+        <h1 class="text-4xl md:text-5xl font-extrabold leading-tight">
+          SI-MANJA
+          <span class="text-blue-600">Sistem Manajemen Kunjungan</span>
+          BKPSDM
+        </h1>
+
+        <p class="text-slate-600 text-lg leading-relaxed">
+          Ajukan kunjungan terjadwal untuk konsultasi/pengurusan administrasi kepegawaian.
+          SI-MANJA membantu mengurangi walk-in, mengatur kuota, dan mendukung monitoring layanan berbasis data.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="booking.html" class="inline-flex items-center justify-center px-6 py-3 rounded-2xl bg-blue-600 text-white font-extrabold hover:bg-blue-700 transition">
+            Mulai Booking Sekarang
+          </a>
+          <a href="tentang.html#alur" class="inline-flex items-center justify-center px-6 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition font-bold text-slate-700">
+            Lihat Alur Layanan
+          </a>
+        </div>
+
+        <div class="grid grid-cols-3 gap-3 pt-4">
+          <div class="glass rounded-2xl p-4">
+            <div class="text-2xl font-extrabold text-slate-900">2</div>
+            <div class="text-xs text-slate-600 font-semibold">Kuota/slot (default)</div>
+          </div>
+          <div class="glass rounded-2xl p-4">
+            <div class="text-2xl font-extrabold text-slate-900">30</div>
+            <div class="text-xs text-slate-600 font-semibold">Menit per slot</div>
+          </div>
+          <div class="glass rounded-2xl p-4">
+            <div class="text-2xl font-extrabold text-slate-900">H+7</div>
+            <div class="text-xs text-slate-600 font-semibold">Maks. jadwal booking</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero visual -->
+      <div class="relative">
+        <div class="rounded-3xl bg-white card p-6 md:p-8">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-sm font-bold text-slate-900">Preview: Bukti Booking</div>
+              <div class="text-xs text-slate-500">contoh tampilan setelah submit</div>
+            </div>
+            <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-50 text-emerald-700 border border-emerald-100">
+              Aktif
+            </span>
+          </div>
+
+          <div class="mt-6 space-y-3">
+            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4">
+              <div class="text-xs text-slate-500 font-bold">Kode Booking</div>
+              <div class="text-xl font-extrabold text-slate-900 tracking-tight">BKPSDM-20260211-2394</div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4">
+                <div class="text-xs text-slate-500 font-bold">Tanggal</div>
+                <div class="font-extrabold">2026-02-12</div>
+              </div>
+              <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4">
+                <div class="text-xs text-slate-500 font-bold">Slot</div>
+                <div class="font-extrabold">08:00</div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl bg-slate-50 border border-slate-200 p-4">
+              <div class="text-xs text-slate-500 font-bold">Jenis Layanan</div>
+              <div class="font-extrabold">E-Kinerja</div>
+            </div>
+
+            <div class="pt-2 text-xs text-slate-500">
+              *Tunjukkan kode booking saat datang, sesuai jadwal.
+            </div>
+          </div>
+        </div>
+
+        <div class="absolute -z-10 -top-6 -right-6 w-24 h-24 rounded-3xl bg-blue-600/10"></div>
+        <div class="absolute -z-10 -bottom-8 -left-8 w-32 h-32 rounded-full bg-emerald-500/10"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div class="text-sm text-slate-600">
+        <div class="font-extrabold text-slate-900">SI-MANJA</div>
+        <div class="mt-1">Sistem Manajemen Kunjungan (Prototype Latsar) • BKPSDM</div>
+      </div>
+      <div class="text-xs text-slate-500">
+        © <span id="y"></span> SI-MANJA • Dibuat untuk peningkatan kualitas layanan
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('y').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
