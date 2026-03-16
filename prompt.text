@@ -1,0 +1,70 @@
+PROMPT FINAL UNTUK CHAT BARU (VERSI PALING LENGKAP)
+
+Copy ini ke chat baru:
+
+Lanjut project SIMANJA BKPSDM (Sistem Janji Temu Online).
+
+Struktur project:
+- Frontend: HTML + Tailwind
+  - index.html
+  - booking.html
+  - cek-booking.html
+  - admin.html
+  - pic.html
+  - tentang.html
+- Backend: Google Apps Script (code.gs)
+- Database: Google Sheet
+
+Sheet:
+- appointments
+- services
+- pic_users
+- settings
+
+Fitur yang sudah berjalan:
+- Booking online
+- Validasi slot berdasarkan layanan & jam PIC
+- Cek booking berdasarkan NIP
+- Multi PIC per layanan
+- PIC bisa update status booking
+- Admin monitoring booking dengan filter tanggal & layanan
+- Branding sudah pakai logo kabupaten
+- UI sudah disesuaikan
+
+Sekarang saya ingin menambahkan:
+Monitoring Selesai di admin.html.
+
+Ketentuan:
+- Hanya menampilkan booking dengan Status = "Selesai"
+- Bisa filter rentang tanggal & layanan
+- Kolom:
+  BookingCode, Tanggal, Layanan, Nama, NIP, Keperluan
+
+Tambahkan juga Dashboard Statistik:
+- Total Booking Selesai
+- Statistik layanan paling banyak digunakan (berdasarkan jumlah selesai)
+- Persentase kontribusi tiap layanan
+- Tampilkan dalam bentuk card + progress bar visual
+
+Buatkan:
+1. Endpoint baru di Code.gs
+2. Update lengkap admin.html
+3. Response JSON efisien
+4. Pastikan tidak mengganggu fitur yang sudah ada
+⚡ Kenapa Prompt Ini Sudah “Sempurna”?
+
+Karena:
+
+Menjelaskan arsitektur
+
+Menjelaskan fitur existing
+
+Menjelaskan fitur baru
+
+Menentukan kolom output
+
+Menentukan visual dashboard
+
+Menentukan constraint (jangan ganggu fitur lama)
+
+Aku langsung bisa lanjut tanpa minta klarifikasi lagi.
