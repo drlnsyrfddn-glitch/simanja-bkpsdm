@@ -7,7 +7,7 @@
  * - settings: Key | Value  (adminKey stored here)
  ************************************************************/
 
-const SPREADSHEET_ID = ""; // kosong jika script bound ke spreadsheet yang sama
+const SPREADSHEET_ID = "1isp6yn_0N2yeXCNGjmLYVhahKavw_zGB2hyoPMhEmlk"; // kosong jika script bound ke spreadsheet yang sama
 const TZ = "Asia/Jakarta";
 
 /* =========================
@@ -46,6 +46,9 @@ function doPost(e) {
       case "admin_pic_delete":          return output_(admin_pic_delete_(data));
 
       case "admin_booking_list":        return output_(admin_booking_list_(data));
+
+      case "admin_selesai_report": return output_(admin_selesai_report_(data));
+
       case "admin_booking_update_status": return output_(update_booking_status_(data, "ADMIN"));
 
       default:
@@ -709,4 +712,75 @@ function admin_booking_list_(data) {
   });
 
   return { ok:true, rows: out };
+}
+
+function admin_selesai_report_(data) {
+  if (!isAdmin_(data.adminKey)) return { ok: false, message: "Unauthorized" };
+  
+  const date_from = normalizeISODate_(data.date_from || "");
+  const date_to = normalizeISODate_(data.date_to || "");
+  const layananFilter = String(data.layanan || "ALL").trim();
+
+  const sh = sheet_("appointments");
+  const values = sh.getDataRange().getValues();
+  const disp = sh.getDataRange().getDisplayValues();
+  const head = values[0].map(String);
+  const idx = (name) => head.indexOf(name);
+
+  const fromObj = date_from ? parseISODateObj_(date_from) : null;
+  const toObj = date_to ? parseISODateObj_(date_to) : null;
+  if (toObj) toObj.setHours(23, 59, 59, 999);
+
+  let totalSelesai = 0;
+  let rows = [];
+  let svcMap = {};
+
+  for (let r = 1; r < values.length; r++) {
+    const status = String(values[r][idx("Status")] || "").trim();
+    if (status !== "Selesai") continue; // Hanya ambil yang selesai
+
+    const tISO = normalizeISODate_(disp[r][idx("Tanggal")] || values[r][idx("Tanggal")]);
+    const tObj = parseISODateObj_(tISO);
+
+    if (fromObj && (!tObj || tObj < fromObj)) continue;
+    if (toObj && (!tObj || tObj > toObj)) continue;
+
+    const layanan = String(values[r][idx("Layanan")] || "").trim();
+    if (layananFilter !== "ALL" && layanan !== layananFilter) continue;
+
+    totalSelesai++;
+    svcMap[layanan] = (svcMap[layanan] || 0) + 1;
+
+    rows.push({
+      bookingCode: String(values[r][idx("BookingCode")] || ""),
+      tanggal: tISO,
+      layanan: layanan,
+      nama: String(values[r][idx("Nama")] || ""),
+      nip: String(values[r][idx("NIP")] || ""),
+      keperluan: String(values[r][idx("Keperluan")] || "")
+    });
+  }
+
+  // Hitung Rekap Per Layanan
+  let by_service = [];
+  let topSvc = { layanan: "-", count: 0 };
+
+  for (let key in svcMap) {
+    let count = svcMap[key];
+    if (count > topSvc.count) topSvc = { layanan: key, count: count };
+    
+    by_service.push({
+      layanan: key,
+      count: count,
+      pct: totalSelesai > 0 ? (count / totalSelesai) * 100 : 0
+    });
+  }
+
+  return { 
+    ok: true, 
+    total: totalSelesai, 
+    top_service: topSvc, 
+    by_service: by_service, 
+    rows: rows 
+  };
 }
