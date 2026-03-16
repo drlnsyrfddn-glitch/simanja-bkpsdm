@@ -44,10 +44,9 @@ function doPost(e) {
       case "admin_pic_update":          return output_(admin_pic_update_(data));
       case "admin_pic_reset_password":  return output_(admin_pic_reset_password_(data));
       case "admin_pic_delete":          return output_(admin_pic_delete_(data));
-
       case "admin_booking_list":        return output_(admin_booking_list_(data));
-
       case "admin_selesai_report": return output_(admin_selesai_report_(data));
+      case "admin_survey_stats": return output_(get_survey_stats_(data.adminKey));
 
       case "admin_booking_update_status": return output_(update_booking_status_(data, "ADMIN"));
 
@@ -782,5 +781,95 @@ function admin_selesai_report_(data) {
     top_service: topSvc, 
     by_service: by_service, 
     rows: rows 
+  };
+}
+
+
+function update_booking_status_(data, actor) {
+  ensureAppointmentsHeader_();
+  const bookingCode = String(data.bookingCode||"").trim();
+  const status = String(data.status||"").trim();
+  const surveyData = data.surveyData || ""; // Data 15 jawaban survey
+
+  const sh = sheet_("appointments");
+  const values = sh.getDataRange().getValues();
+  const head = values[0].map(String);
+  const idx = (name) => head.indexOf(name);
+  
+  const iBooking = idx("BookingCode");
+  const iStatus = idx("Status");
+  const iSurvey = idx("Survey_JSON"); 
+
+  for (let r=1; r<values.length; r++) {
+    if (String(values[r][iBooking]||"").trim() === bookingCode) {
+      sh.getRange(r+1, iStatus+1).setValue(status);
+      if (status === "Selesai" && iSurvey !== -1) {
+        sh.getRange(r+1, iSurvey+1).setValue(surveyData);
+      }
+      return { ok:true, actor };
+    }
+  }
+  return { ok:false, message:"BookingCode tidak ditemukan." };
+}
+
+/**
+ * Fungsi untuk Menghitung Statistik Survey
+ * Digunakan oleh Dashboard Admin
+ */
+function get_survey_stats_(adminKey) {
+  if (!isAdmin_(adminKey)) return { ok: false, message: "Unauthorized" };
+
+  const sh = sheet_("appointments");
+  const values = sh.getDataRange().getValues();
+  const head = values[0].map(String);
+  const idx = (name) => head.indexOf(name);
+  const iSurvey = idx("Survey_JSON");
+
+  if (iSurvey === -1) return { ok: false, message: "Kolom Survey_JSON tidak ditemukan." };
+
+  let totalSkorSemua = 0;
+  let jumlahResponden = 0;
+  
+  // Penampung rata-rata per kategori (berdasarkan 15 pertanyaan Bapak)
+  let kategori = {
+    efisiensi: 0,   // Pertanyaan 1-5
+    kenyamanan: 0,  // Pertanyaan 6-10
+    kualitas: 0     // Pertanyaan 11-15
+  };
+
+  for (let r = 1; r < values.length; r++) {
+    const rawData = String(values[r][iSurvey] || "").trim();
+    if (!rawData) continue;
+
+    const scores = rawData.split(",").map(Number);
+    if (scores.length < 15) continue;
+
+    jumlahResponden++;
+    
+    // Hitung per kategori
+    const sumEfisiensi = scores.slice(0, 5).reduce((a, b) => a + b, 0);
+    const sumKenyamanan = scores.slice(5, 10).reduce((a, b) => a + b, 0);
+    const sumKualitas = scores.slice(10, 15).reduce((a, b) => a + b, 0);
+
+    kategori.efisiensi += (sumEfisiensi / 5);
+    kategori.kenyamanan += (sumKenyamanan / 5);
+    kategori.kualitas += (sumKualitas / 5);
+    
+    totalSkorSemua += (scores.reduce((a, b) => a + b, 0) / 15);
+  }
+
+  // Finalisasi Rata-rata
+  if (jumlahResponden > 0) {
+    kategori.efisiensi = (kategori.efisiensi / jumlahResponden).toFixed(2);
+    kategori.kenyamanan = (kategori.kenyamanan / jumlahResponden).toFixed(2);
+    kategori.kualitas = (kategori.kualitas / jumlahResponden).toFixed(2);
+    totalSkorSemua = (totalSkorSemua / jumlahResponden).toFixed(2);
+  }
+
+  return {
+    ok: true,
+    responden: jumlahResponden,
+    ikl: totalSkorSemua, // Indeks Kepuasan Layanan (Skala 1-5)
+    detail: kategori
   };
 }

@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BKPSDM — Admin</title>
+  <title>BKPSDM — Admin SI-MANJA</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     body { font-family: 'Inter', sans-serif; }
@@ -19,803 +20,255 @@
 
 <header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
   <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-
-    <!-- LEFT: LOGO + TITLE -->
     <div class="flex items-center gap-4">
-      <img src="assets/logo1.png" alt="Logo Luwu Timur" class="w-10 h-10 object-contain" />
-
+      <img src="assets/logo1.png" alt="Logo" class="w-10 h-10 object-contain" />
       <div>
-        <div class="text-lg font-extrabold leading-tight">
-          SI-MANJA
-        </div>
-        <div class="text-xs text-slate-500 leading-tight">
-          Sistem Manajemen Kunjungan • Admin Panel
-        </div>
+        <div class="text-lg font-extrabold leading-tight tracking-tight text-slate-900">SI-MANJA</div>
+        <div class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Admin Panel • BKPSDM</div>
       </div>
     </div>
-
-    <!-- RIGHT BUTTON -->
     <div class="flex items-center gap-3">
-      <a href="index.html"
-         class="px-4 py-2 border rounded-xl text-sm font-bold hover:bg-slate-50">
-         Home
-      </a>
-
-      <button id="logoutBtn"
-        class="hidden px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-bold hover:bg-blue-700">
-        Logout
-      </button>
+      <a href="index.html" class="px-4 py-2 border rounded-xl text-xs font-bold hover:bg-slate-50">Home</a>
+      <button id="logoutBtn" class="hidden px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700">Logout</button>
     </div>
-
   </div>
 </header>
 
-
 <main class="max-w-6xl mx-auto px-6 py-8 space-y-6">
 
-  <!-- LOGIN ADMIN -->
-  <div id="loginCard" class="card bg-white rounded-3xl p-6 max-w-xl mx-auto">
-    <h2 class="text-xl font-extrabold mb-2">Login Admin</h2>
-    <p class="text-sm text-slate-500 mb-4">Masukkan password admin untuk mengelola PIC & monitoring booking.</p>
-
-    <label class="text-sm font-bold">Admin Password</label>
-    <input id="adminKey" type="password" class="mt-2 w-full border rounded-xl px-4 py-3" placeholder="admin password" />
-
-    <button id="loginBtn" class="mt-4 w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700">
-      Masuk
-    </button>
-
+  <div id="loginCard" class="card bg-white rounded-[32px] p-8 max-w-lg mx-auto text-center">
+    <h2 class="text-2xl font-black mb-2 tracking-tight">ADMIN LOGIN</h2>
+    <p class="text-xs text-slate-500 font-bold uppercase mb-6 tracking-widest">Akses Manajemen Sistem</p>
+    <div class="text-left">
+      <label class="text-[10px] font-black uppercase text-slate-400 ml-1">Admin Password</label>
+      <input id="adminKey" type="password" class="mt-1 w-full border rounded-2xl px-5 py-4 bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Masukkan password" />
+    </div>
+    <button id="loginBtn" class="mt-6 w-full bg-blue-600 text-white py-4 rounded-2xl font-black hover:bg-blue-700 transition shadow-xl shadow-blue-100 uppercase tracking-widest text-sm text-center">Masuk</button>
     <div id="loginMsg" class="mt-4"></div>
   </div>
 
-  <!-- PANEL -->
   <div id="panel" class="hidden space-y-6">
-
-    <!-- TAB -->
-    <div class="flex gap-3">
-      <button id="tabPic" class="tab-btn active px-4 py-2 rounded-xl border font-bold text-sm">Kelola PIC</button>
-      <button id="tabBooking" class="tab-btn px-4 py-2 rounded-xl border font-bold text-sm">Monitoring Booking</button>
-      <button id="tabSelesai" class="tab-btn px-4 py-2 rounded-xl border font-bold text-sm">Monitoring Selesai</button>
-      <button id="refreshAllBtn" class="ml-auto px-4 py-2 rounded-xl border font-bold text-sm hover:bg-slate-50">Refresh</button>
+    <div class="flex flex-wrap gap-2">
+      <button id="tabPic" class="tab-btn active px-5 py-2.5 rounded-xl border font-black text-xs uppercase tracking-wider transition">Kelola PIC</button>
+      <button id="tabBooking" class="tab-btn px-5 py-2.5 rounded-xl border font-black text-xs uppercase tracking-wider transition">Monitoring Booking</button>
+      <button id="tabSelesai" class="tab-btn px-5 py-2.5 rounded-xl border font-black text-xs uppercase tracking-wider transition">Monitoring Selesai & Survey</button>
+      <button id="refreshAllBtn" class="ml-auto px-5 py-2.5 rounded-xl border font-black text-xs uppercase tracking-wider hover:bg-slate-50 transition">Refresh</button>
     </div>
 
-    <!-- =======================
-         SECTION: PIC USERS
-    ======================== -->
     <section id="secPic" class="space-y-6">
-
-      <!-- ADD PIC -->
-      <div class="card bg-white rounded-3xl p-6">
-        <h2 class="text-xl font-extrabold">Tambah PIC</h2>
-
-        <div class="grid md:grid-cols-3 gap-4 mt-4">
-          <div>
-            <label class="text-sm font-bold">Layanan</label>
-            <select id="picLayanan" class="mt-2 w-full border rounded-xl px-4 py-3">
-              <option value="">Memuat layanan...</option>
-            </select>
-          </div>
-          <div>
-            <label class="text-sm font-bold">Nama PIC</label>
-            <input id="picNama" class="mt-2 w-full border rounded-xl px-4 py-3" placeholder="Nama PIC" />
-          </div>
-          <div>
-            <label class="text-sm font-bold">Role</label>
-            <select id="picRole" class="mt-2 w-full border rounded-xl px-4 py-3">
-              <option value="PIC">PIC</option>
-              <option value="KOORDINATOR">KOORDINATOR</option>
-            </select>
-          </div>
+      <div class="card bg-white rounded-[32px] p-8">
+        <h2 class="text-xl font-black tracking-tight mb-4 uppercase">Tambah PIC Layanan</h2>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Layanan</label><select id="picLayanan" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm"></select></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Nama PIC</label><input id="picNama" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm" placeholder="Nama Lengkap" /></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Role</label><select id="picRole" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm"><option value="PIC">PIC</option><option value="KOORDINATOR">KOORDINATOR</option></select></div>
         </div>
-
-        <div class="grid md:grid-cols-3 gap-4 mt-4">
-          <div>
-            <label class="text-sm font-bold">Username</label>
-            <input id="picUsername" class="mt-2 w-full border rounded-xl px-4 py-3" placeholder="contoh: nip/username" />
-          </div>
-          <div>
-            <label class="text-sm font-bold">Password</label>
-            <input id="picPassword" class="mt-2 w-full border rounded-xl px-4 py-3" placeholder="password awal" />
-          </div>
-          <div>
-            <label class="text-sm font-bold">Aktif</label>
-            <select id="picAktif" class="mt-2 w-full border rounded-xl px-4 py-3">
-              <option value="YES">YES</option>
-              <option value="NO">NO</option>
-            </select>
-          </div>
+        <div class="grid md:grid-cols-3 gap-5 mt-4">
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Username</label><input id="picUsername" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm" placeholder="Username" /></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Password</label><input id="picPassword" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm" placeholder="Password Awal" /></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Status Aktif</label><select id="picAktif" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm"><option value="YES">YES</option><option value="NO">NO</option></select></div>
         </div>
-
-        <button id="addPicBtn" class="mt-4 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700">
-          Tambah PIC
-        </button>
-
+        <button id="addPicBtn" class="mt-6 bg-blue-600 text-white px-8 py-3 rounded-xl font-black hover:bg-blue-700 transition uppercase text-xs tracking-widest">Simpan Akun PIC</button>
         <div id="picMsg" class="mt-4"></div>
       </div>
-
-      <!-- LIST PIC -->
-      <div class="card bg-white rounded-3xl p-6">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-          <h3 class="text-lg font-extrabold">Daftar PIC</h3>
-          <input id="searchInput" class="border rounded-xl px-4 py-2 text-sm w-full md:w-80"
-                 placeholder="Cari layanan / nama / username..." />
+      <div class="card bg-white rounded-[32px] p-8">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-lg font-black tracking-tight uppercase">Daftar Akun PIC</h3>
+          <input id="searchInput" class="border rounded-xl px-4 py-2 text-xs font-bold w-64" placeholder="Cari PIC..." />
         </div>
-
-        <div class="overflow-auto">
-          <table class="min-w-full text-sm">
-            <thead class="bg-slate-100">
-              <tr>
-                <th class="px-4 py-2 text-left">Layanan</th>
-                <th class="px-4 py-2 text-left">Nama</th>
-                <th class="px-4 py-2 text-left">Username</th>
-                <th class="px-4 py-2 text-left">Role</th>
-                <th class="px-4 py-2 text-left">Aktif</th>
-                <th class="px-4 py-2 text-left">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="picTable"></tbody>
-          </table>
+        <div class="overflow-auto rounded-2xl border">
+          <table class="min-w-full text-xs"><thead class="bg-slate-50"><tr><th class="px-4 py-4 text-left font-black text-slate-500 uppercase">Layanan</th><th class="px-4 py-4 text-left font-black text-slate-500 uppercase">Nama</th><th class="px-4 py-4 text-left font-black text-slate-500 uppercase">Username</th><th class="px-4 py-4 text-left font-black text-slate-500 uppercase">Status</th><th class="px-4 py-4 text-left font-black text-slate-500 uppercase">Aksi</th></tr></thead><tbody id="picTable" class="divide-y"></tbody></table>
         </div>
-
         <div id="listMsg" class="mt-4"></div>
       </div>
-
     </section>
 
-    <!-- =======================
-         SECTION: BOOKING MONITOR (lama - tetap)
-    ======================== -->
-    <section id="secBooking" class="hidden space-y-6">
-
-      <div class="card bg-white rounded-3xl p-6">
-        <h2 class="text-xl font-extrabold">Monitoring Booking</h2>
-        <p class="text-sm text-slate-500 mt-1">Default menampilkan semua tanggal. Isi rentang tanggal untuk monitoring harian.</p>
-
-        <!-- FILTER -->
-        <div class="grid md:grid-cols-5 gap-4 mt-4">
-          <div>
-            <label class="text-sm font-bold">Dari Tanggal (opsional)</label>
-            <input type="date" id="fFrom" class="mt-2 w-full border rounded-xl px-4 py-3">
-          </div>
-
-          <div>
-            <label class="text-sm font-bold">Sampai Tanggal (opsional)</label>
-            <input type="date" id="fTo" class="mt-2 w-full border rounded-xl px-4 py-3">
-          </div>
-
-          <div>
-            <label class="text-sm font-bold">Layanan</label>
-            <select id="fLayanan" class="mt-2 w-full border rounded-xl px-4 py-3">
-              <option value="ALL">ALL</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-sm font-bold">Status</label>
-            <select id="fStatus" class="mt-2 w-full border rounded-xl px-4 py-3">
-              <option value="ALL">ALL</option>
-              <option value="Booked">Booked</option>
-              <option value="Hadir">Hadir</option>
-              <option value="Selesai">Selesai</option>
-              <option value="Batal">Batal</option>
-              <option value="No-show">No-show</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="text-sm font-bold">Cari NIP (opsional)</label>
-            <input id="fNip" class="mt-2 w-full border rounded-xl px-4 py-3" placeholder="contoh: 1998...">
-          </div>
-        </div>
-
-        <div class="flex gap-3 mt-4">
-          <button id="loadBookingBtn" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700">
-            Muat Data
-          </button>
-          <button id="resetFilterBtn" class="border px-6 py-3 rounded-xl font-bold hover:bg-slate-50">
-            Reset
-          </button>
-        </div>
-
-        <div id="bookingMsg" class="mt-4"></div>
-      </div>
-
-      <div class="card bg-white rounded-3xl p-6">
-        <div class="overflow-auto">
-          <table class="min-w-full text-sm">
-            <thead class="bg-slate-100">
-              <tr>
-                <th class="px-4 py-2 text-left">Tanggal</th>
-                <th class="px-4 py-2 text-left">Slot</th>
-                <th class="px-4 py-2 text-left">Layanan</th>
-                <th class="px-4 py-2 text-left">Nama</th>
-                <th class="px-4 py-2 text-left">NIP</th>
-                <th class="px-4 py-2 text-left">Status</th>
-                <th class="px-4 py-2 text-left">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="bookingTable"></tbody>
-          </table>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- =======================
-         SECTION: MONITORING SELESAI (baru)
-    ======================== -->
     <section id="secSelesai" class="hidden space-y-6">
-
-      <!-- FILTER + DASHBOARD -->
-      <div class="card bg-white rounded-3xl p-6">
-        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-          <div>
-            <h2 class="text-xl font-extrabold">Monitoring Selesai</h2>
-            <p class="text-sm text-slate-500 mt-1">
-              Menampilkan booking dengan <b>Status = Selesai</b>. Gunakan filter untuk melihat periode & layanan tertentu.
-            </p>
-          </div>
-          <button id="loadSelesaiBtn" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700">
-            Muat Data
-          </button>
+      <div class="card bg-white rounded-[32px] p-8">
+        <div class="flex justify-between items-end gap-4 mb-6">
+          <div><h2 class="text-2xl font-black tracking-tight">Monitoring Selesai & Survey</h2><p class="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Statistik kepuasan dan realisasi layanan</p></div>
+          <button id="loadSelesaiBtn" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black hover:bg-blue-700 transition uppercase text-xs tracking-widest shadow-lg shadow-blue-100 text-center">Muat Data</button>
         </div>
-
-        <!-- FILTER -->
-        <div class="grid md:grid-cols-3 gap-4 mt-5">
-          <div>
-            <label class="text-sm font-bold">Dari Tanggal (opsional)</label>
-            <input type="date" id="sFrom" class="mt-2 w-full border rounded-xl px-4 py-3">
-          </div>
-          <div>
-            <label class="text-sm font-bold">Sampai Tanggal (opsional)</label>
-            <input type="date" id="sTo" class="mt-2 w-full border rounded-xl px-4 py-3">
-          </div>
-          <div>
-            <label class="text-sm font-bold">Layanan</label>
-            <select id="sLayanan" class="mt-2 w-full border rounded-xl px-4 py-3">
-              <option value="ALL">ALL</option>
-            </select>
-          </div>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Dari Tanggal</label><input type="date" id="sFrom" class="mt-1 w-full border rounded-xl px-4 py-3 font-bold text-sm outline-none"></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Sampai Tanggal</label><input type="date" id="sTo" class="mt-1 w-full border rounded-xl px-4 py-3 font-bold text-sm outline-none"></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Layanan</label><select id="sLayanan" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm outline-none"><option value="ALL">ALL</option></select></div>
         </div>
-
         <div id="selesaiMsg" class="mt-4"></div>
 
-        <!-- DASHBOARD -->
-        <div class="mt-6 grid md:grid-cols-3 gap-4">
-          <div class="rounded-2xl border bg-slate-50 p-4">
-            <div class="text-xs text-slate-500 font-bold">Total Booking Selesai</div>
-            <div class="mt-1 text-3xl font-extrabold" id="selesaiTotal">0</div>
-            <div class="mt-1 text-xs text-slate-500" id="selesaiTotalNote">Sesuai filter</div>
+        <div class="mt-10 grid lg:grid-cols-2 gap-8">
+          <div class="card bg-white rounded-3xl p-6 border border-slate-100 flex flex-col justify-center">
+            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 text-center">Grafik Radar Kepuasan (IKL)</h3>
+            <div class="relative h-[320px] flex items-center justify-center">
+              <canvas id="surveyChart"></canvas>
+            </div>
           </div>
-
-          <div class="rounded-2xl border bg-slate-50 p-4">
-            <div class="text-xs text-slate-500 font-bold">Layanan Terbanyak</div>
-            <div class="mt-1 text-lg font-extrabold" id="selesaiTopSvc">-</div>
-            <div class="mt-1 text-xs text-slate-500" id="selesaiTopSvcNote">0 selesai</div>
-          </div>
-
-          <div class="rounded-2xl border bg-slate-50 p-4">
-            <div class="text-xs text-slate-500 font-bold">Distribusi Layanan</div>
-            <div class="mt-1 text-sm text-slate-600">
-              Lihat tabel per layanan & progress bar di bawah.
+          <div class="space-y-4">
+            <div class="rounded-[28px] bg-blue-600 p-8 text-white shadow-2xl shadow-blue-200">
+              <div class="text-[10px] font-black uppercase tracking-widest opacity-80">Indeks Kepuasan Layanan (IKL)</div>
+              <div class="mt-2 text-6xl font-black tracking-tighter" id="sklTotal">0.0</div>
+              <div class="mt-3 text-xs font-bold opacity-90 italic uppercase tracking-wider" id="sklResponden">Berdasarkan 0 Responden</div>
+            </div>
+            <div class="grid gap-3">
+              <div class="p-5 rounded-2xl border bg-white"><div class="flex justify-between text-[10px] font-black uppercase text-slate-500"><span>Efisiensi Waktu</span><span id="valEfisiensi" class="text-blue-600">0</span></div><div class="mt-2 w-full bg-slate-100 rounded-full h-2 overflow-hidden"><div id="barEfisiensi" class="bg-blue-600 h-2 transition-all duration-1000" style="width: 0%"></div></div></div>
+              <div class="p-5 rounded-2xl border bg-white"><div class="flex justify-between text-[10px] font-black uppercase text-slate-500"><span>Kenyamanan Antrean</span><span id="valKenyamanan" class="text-emerald-500">0</span></div><div class="mt-2 w-full bg-slate-100 rounded-full h-2 overflow-hidden"><div id="barKenyamanan" class="bg-emerald-500 h-2 transition-all duration-1000" style="width: 0%"></div></div></div>
+              <div class="p-5 rounded-2xl border bg-white"><div class="flex justify-between text-[10px] font-black uppercase text-slate-500"><span>Kualitas Pelayanan</span><span id="valKualitas" class="text-amber-500">0</span></div><div class="mt-2 w-full bg-slate-100 rounded-full h-2 overflow-hidden"><div id="barKualitas" class="bg-amber-500 h-2 transition-all duration-1000" style="width: 0%"></div></div></div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- TABLE PER LAYANAN + PROGRESS -->
-      <div class="card bg-white rounded-3xl p-6">
-        <div class="flex items-center justify-between gap-3">
-          <h3 class="text-lg font-extrabold">Rekap Per Layanan</h3>
-          <div class="text-xs text-slate-500">Kontribusi = (selesai per layanan / total selesai) × 100%</div>
-        </div>
-
-        <div class="overflow-auto mt-4">
-          <table class="min-w-full text-sm">
-            <thead class="bg-slate-100">
-              <tr>
-                <th class="px-4 py-2 text-left">Layanan</th>
-                <th class="px-4 py-2 text-left">Jumlah Selesai</th>
-                <th class="px-4 py-2 text-left">Kontribusi</th>
-                <th class="px-4 py-2 text-left">Progress</th>
-              </tr>
-            </thead>
-            <tbody id="selesaiSvcTable"></tbody>
-          </table>
+        <div class="mt-10">
+          <h3 class="text-sm font-black text-slate-800 uppercase mb-4 tracking-widest">Realisasi Per Jenis Layanan</h3>
+          <div class="overflow-hidden rounded-2xl border">
+            <table class="min-w-full text-xs text-left"><thead class="bg-slate-50"><tr><th class="px-4 py-4 font-black text-slate-500 uppercase">Layanan</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Selesai</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Kontribusi</th><th class="px-4 py-4 font-black text-slate-500 uppercase text-center">Progress</th></tr></thead><tbody id="selesaiSvcTable" class="divide-y"></tbody></table>
+          </div>
         </div>
       </div>
-
-      <!-- TABLE DETAIL SELESAI -->
-      <div class="card bg-white rounded-3xl p-6">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
-          <h3 class="text-lg font-extrabold">Daftar Booking Selesai</h3>
-          <div class="text-sm text-slate-500" id="selesaiCountLabel">0 data</div>
-        </div>
-
-        <div class="overflow-auto">
-          <table class="min-w-full text-sm">
-            <thead class="bg-slate-100">
-              <tr>
-                <th class="px-4 py-2 text-left">BookingCode</th>
-                <th class="px-4 py-2 text-left">Tanggal</th>
-                <th class="px-4 py-2 text-left">Layanan</th>
-                <th class="px-4 py-2 text-left">Nama</th>
-                <th class="px-4 py-2 text-left">NIP</th>
-                <th class="px-4 py-2 text-left">Deskripsi Keluhan</th>
-              </tr>
-            </thead>
-            <tbody id="selesaiTable"></tbody>
-          </table>
-        </div>
-      </div>
-
     </section>
 
+    <section id="secBooking" class="hidden">
+      <div class="card bg-white rounded-[32px] p-8">
+        <h2 class="text-xl font-black mb-6 uppercase tracking-tight">Monitoring Semua Booking</h2>
+        <div class="grid md:grid-cols-5 gap-4">
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Dari</label><input type="date" id="fFrom" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none"></div>
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Sampai</label><input type="date" id="fTo" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none"></div>
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Layanan</label><select id="fLayanan" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none"></select></div>
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Status</label><select id="fStatus" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none"><option value="ALL">ALL</option><option value="Booked">Booked</option><option value="Hadir">Hadir</option><option value="Selesai">Selesai</option><option value="Batal">Batal</option><option value="No-show">No-show</option></select></div>
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Cari NIP</label><input id="fNip" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none" placeholder="NIP"></div>
+        </div>
+        <div class="flex gap-2 mt-4"><button id="loadBookingBtn" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-black text-[10px] uppercase">Muat</button><button id="resetFilterBtn" class="border px-6 py-2 rounded-xl font-black text-[10px] uppercase">Reset</button></div>
+        <div id="bookingMsg" class="mt-4"></div>
+        <div class="mt-6 overflow-hidden rounded-2xl border"><table class="min-w-full text-xs text-left"><thead class="bg-slate-50"><tr><th class="px-4 py-4 font-black text-slate-500 uppercase">Tanggal</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Slot</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Layanan</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Nama</th><th class="px-4 py-4 font-black text-slate-500 uppercase text-center">Aksi</th></tr></thead><tbody id="bookingTable" class="divide-y"></tbody></table></div>
+      </div>
+    </section>
   </div>
 </main>
 
 <script>
-/** GANTI jika URL web app berubah */
 const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzKebxSRf7BfZwAA16MHaP4bX4q72xsjcmROECyrHblIzEv05i-53nhi3m6QAeV0jPD/exec";
-
 let adminKey = "";
 let allUsers = [];
+let myChart = null;
 
-async function api(payload){
-  const res = await fetch(ENDPOINT_URL,{
-    method:"POST",
-    headers:{ "Content-Type":"text/plain" },
-    body: JSON.stringify(payload)
-  });
+async function api(payload) {
+  const res = await fetch(ENDPOINT_URL, { method:"POST", headers:{"Content-Type":"text/plain"}, body: JSON.stringify(payload) });
   return await res.json();
 }
 
-function showMsg(el,msg,type="error"){
-  const cls = type==="success"
-    ? "bg-green-50 border-green-200 text-green-800"
-    : "bg-red-50 border-red-200 text-red-800";
-  el.innerHTML = `<div class="${cls} border p-3 rounded-xl text-sm">${msg}</div>`;
+function showMsg(el,msg,type="error") {
+  const cls = type==="success" ? "bg-green-50 text-green-800 border-green-200" : "bg-red-50 text-red-800 border-red-200";
+  el.innerHTML = `<div class="${cls} border p-4 rounded-xl text-xs font-bold">${msg}</div>`;
 }
-function clearMsg(el){ el.innerHTML=""; }
 
-/* ===============================
-   TAB UI
-================================ */
-const tabPic = document.getElementById("tabPic");
-const tabBooking = document.getElementById("tabBooking");
-const tabSelesai = document.getElementById("tabSelesai");
-
-const secPic = document.getElementById("secPic");
-const secBooking = document.getElementById("secBooking");
-const secSelesai = document.getElementById("secSelesai");
-
-function activateTab(which){
-  // reset
-  tabPic.classList.remove("active");
-  tabBooking.classList.remove("active");
-  tabSelesai.classList.remove("active");
-
-  secPic.classList.add("hidden");
-  secBooking.classList.add("hidden");
-  secSelesai.classList.add("hidden");
-
-  if(which==="PIC"){
-    tabPic.classList.add("active");
-    secPic.classList.remove("hidden");
-  } else if(which==="BOOKING"){
-    tabBooking.classList.add("active");
-    secBooking.classList.remove("hidden");
-  } else {
-    tabSelesai.classList.add("active");
-    secSelesai.classList.remove("hidden");
-  }
+function activateTab(which) {
+  ["tabPic","tabBooking","tabSelesai"].forEach(t => document.getElementById(t).classList.remove("active"));
+  ["secPic","secBooking","secSelesai"].forEach(s => document.getElementById(s).classList.add("hidden"));
+  document.getElementById("tab"+which).classList.add("active");
+  document.getElementById("sec"+which).classList.remove("hidden");
 }
-tabPic.addEventListener("click", ()=>activateTab("PIC"));
-tabBooking.addEventListener("click", ()=>activateTab("BOOKING"));
-tabSelesai.addEventListener("click", ()=>activateTab("SELESAI"));
+document.getElementById("tabPic").onclick = () => activateTab("Pic");
+document.getElementById("tabBooking").onclick = () => activateTab("Booking");
+document.getElementById("tabSelesai").onclick = () => activateTab("Selesai");
 
-/* ===============================
-   LOAD SERVICES (dedupe)
-================================ */
-async function loadServices(){
+async function loadServices() {
+  const data = await api({ action:"admin_services_all", adminKey });
+  if(!data.ok) return;
   const selPic = document.getElementById("picLayanan");
   const selFilter = document.getElementById("fLayanan");
   const selSelesai = document.getElementById("sLayanan");
-
-  selPic.options.length = 0;
-  selFilter.options.length = 0;
-  selSelesai.options.length = 0;
-
+  [selPic, selFilter, selSelesai].forEach(s => s.options.length = 0);
   selPic.add(new Option("-- Pilih Layanan --", ""));
   selFilter.add(new Option("ALL", "ALL"));
   selSelesai.add(new Option("ALL", "ALL"));
-
-  const data = await api({ action:"admin_services_all", adminKey });
-  if(!data.ok){
-    selPic.options.length = 0;
-    selPic.add(new Option("(Gagal memuat layanan)", ""));
-    return;
-  }
-
   const seen = new Set();
-  (data.services || []).forEach(s=>{
-    const name = (s.layanan || "").trim();
-    if(!name) return;
-    if(seen.has(name)) return;
-    seen.add(name);
-
-    selPic.add(new Option(`${name} (${s.aktif})`, name));
-    selFilter.add(new Option(name, name));
-    selSelesai.add(new Option(name, name));
+  (data.services || []).forEach(s => {
+    const name = s.layanan.trim(); if(!name || seen.has(name)) return; seen.add(name);
+    selPic.add(new Option(name, name)); selFilter.add(new Option(name, name)); selSelesai.add(new Option(name, name));
   });
 }
 
-/* ===============================
-   PIC USERS
-================================ */
-async function loadPicList(){
+async function loadPicList() {
   const data = await api({ action:"admin_pic_list", adminKey });
-  if(!data.ok) return showMsg(document.getElementById("listMsg"), data.message || "Gagal memuat PIC.");
-  allUsers = data.users || [];
-  renderPicList();
+  if(!data.ok) return;
+  allUsers = data.users || []; renderPicList();
 }
 
-function renderPicList(){
-  const q = document.getElementById("searchInput").value.trim().toLowerCase();
-  const rows = q
-    ? allUsers.filter(u =>
-        (u.layanan||"").toLowerCase().includes(q) ||
-        (u.nama||"").toLowerCase().includes(q) ||
-        (u.username||"").toLowerCase().includes(q)
-      )
-    : allUsers;
-
-  const tb = document.getElementById("picTable");
-  tb.innerHTML = "";
-
-  if(rows.length===0){
-    showMsg(document.getElementById("listMsg"), "Belum ada data PIC.", "success");
-    return;
-  }
-  clearMsg(document.getElementById("listMsg"));
-
-  rows.forEach(u=>{
+function renderPicList() {
+  const tb = document.getElementById("picTable"); tb.innerHTML = "";
+  allUsers.forEach(u => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="px-4 py-3">${u.layanan}</td>
-      <td class="px-4 py-3">${u.nama||"-"}</td>
-      <td class="px-4 py-3">${u.username}</td>
-      <td class="px-4 py-3">
-        <select class="roleSel border rounded px-2 py-2" data-l="${u.layanan}" data-u="${u.username}">
-          ${["PIC","KOORDINATOR"].map(r=>`<option value="${r}" ${u.role===r?"selected":""}>${r}</option>`).join("")}
-        </select>
-      </td>
-      <td class="px-4 py-3">
-        <select class="aktifSel border rounded px-2 py-2" data-l="${u.layanan}" data-u="${u.username}">
-          <option value="YES" ${u.aktif==="YES"?"selected":""}>YES</option>
-          <option value="NO" ${u.aktif==="NO"?"selected":""}>NO</option>
-        </select>
-      </td>
-      <td class="px-4 py-3 flex flex-wrap gap-2">
-        <button class="saveBtn bg-blue-600 text-white px-3 py-2 rounded-lg font-bold"
-          data-l="${u.layanan}" data-u="${u.username}">Simpan</button>
-
-        <button class="resetBtn border px-3 py-2 rounded-lg font-bold"
-          data-l="${u.layanan}" data-u="${u.username}">Reset PW</button>
-
-        <button class="delBtn bg-red-600 text-white px-3 py-2 rounded-lg font-bold"
-          data-l="${u.layanan}" data-u="${u.username}">Hapus</button>
-      </td>
-    `;
+    tr.innerHTML = `<td class="px-4 py-4 font-bold">${u.layanan}</td><td class="px-4 py-4">${u.nama}</td><td class="px-4 py-4 font-mono">${u.username}</td><td class="px-4 py-4"><span class="px-2 py-1 rounded-full text-[10px] font-black ${u.aktif==='YES'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${u.aktif}</span></td><td class="px-4 py-4 text-center"><button onclick="deletePic('${u.layanan}','${u.username}')" class="text-red-500 font-black uppercase text-[10px]">Hapus</button></td>`;
     tb.appendChild(tr);
   });
+}
 
-  document.querySelectorAll(".saveBtn").forEach(btn=>{
-    btn.addEventListener("click", async ()=>{
-      const layanan = btn.dataset.l;
-      const username = btn.dataset.u;
-      const role = document.querySelector(`.roleSel[data-l="${layanan}"][data-u="${username}"]`).value;
-      const aktif = document.querySelector(`.aktifSel[data-l="${layanan}"][data-u="${username}"]`).value;
+async function loadSurveyStats() {
+  try {
+    const resp = await api({ action: "admin_survey_stats", adminKey });
+    if (!resp.ok) return;
+    document.getElementById("sklTotal").textContent = resp.ikl;
+    document.getElementById("sklResponden").textContent = `Berdasarkan ${resp.responden} Responden`;
+    document.getElementById("valEfisiensi").textContent = resp.detail.efisiensi;
+    document.getElementById("barEfisiensi").style.width = (resp.detail.efisiensi / 5 * 100) + "%";
+    document.getElementById("valKenyamanan").textContent = resp.detail.kenyamanan;
+    document.getElementById("barKenyamanan").style.width = (resp.detail.kenyamanan / 5 * 100) + "%";
+    document.getElementById("valKualitas").textContent = resp.detail.kualitas;
+    document.getElementById("barKualitas").style.width = (resp.detail.kualitas / 5 * 100) + "%";
+    renderSurveyChart(resp.detail);
+  } catch (e) { console.error(e); }
+}
 
-      const resp = await api({ action:"admin_pic_update", adminKey, layanan, username, role, aktif });
-      alert(resp.ok ? "Berhasil disimpan" : (resp.message || "Gagal"));
-      if(resp.ok) await loadPicList();
-    });
-  });
-
-  document.querySelectorAll(".resetBtn").forEach(btn=>{
-    btn.addEventListener("click", async ()=>{
-      const layanan = btn.dataset.l;
-      const username = btn.dataset.u;
-      const newPassword = prompt(`Reset password untuk ${username} (${layanan})\nMasukkan password baru:`);
-      if(!newPassword) return;
-
-      const resp = await api({ action:"admin_pic_reset_password", adminKey, layanan, username, newPassword });
-      alert(resp.ok ? "Password berhasil direset" : (resp.message || "Gagal"));
-    });
-  });
-
-  document.querySelectorAll(".delBtn").forEach(btn=>{
-    btn.addEventListener("click", async ()=>{
-      const layanan = btn.dataset.l;
-      const username = btn.dataset.u;
-      if(!confirm(`Yakin hapus PIC ${username} untuk layanan ${layanan}?`)) return;
-
-      const resp = await api({ action:"admin_pic_delete", adminKey, layanan, username });
-      alert(resp.ok ? "PIC berhasil dihapus" : (resp.message || "Gagal"));
-      if(resp.ok) await loadPicList();
-    });
+function renderSurveyChart(detail) {
+  const ctx = document.getElementById('surveyChart').getContext('2d');
+  if (myChart) myChart.destroy();
+  myChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['EFISIENSI', 'KENYAMANAN', 'KUALITAS'],
+      datasets: [{
+        label: 'SKOR IKL',
+        data: [detail.efisiensi, detail.kenyamanan, detail.kualitas],
+        backgroundColor: 'rgba(37, 99, 235, 0.15)',
+        borderColor: '#2563eb',
+        borderWidth: 4,
+        pointBackgroundColor: '#2563eb',
+        pointRadius: 4
+      }]
+    },
+    options: {
+      scales: { r: { min: 0, max: 5, ticks: { display: false, stepSize: 1 }, grid: { color: '#e2e8f0' }, angleLines: { color: '#e2e8f0' }, pointLabels: { font: { size: 10, weight: '900' } } } },
+      plugins: { legend: { display: false } }
+    }
   });
 }
 
-document.getElementById("searchInput").addEventListener("input", renderPicList);
-
-document.getElementById("addPicBtn").addEventListener("click", async ()=>{
-  const msg = document.getElementById("picMsg");
-  clearMsg(msg);
-
-  const layanan = document.getElementById("picLayanan").value;
-  const nama = document.getElementById("picNama").value.trim();
-  const username = document.getElementById("picUsername").value.trim();
-  const password = document.getElementById("picPassword").value.trim();
-  const role = document.getElementById("picRole").value;
-  const aktif = document.getElementById("picAktif").value;
-
-  if(!layanan) return showMsg(msg,"Layanan wajib dipilih.");
-  if(!username) return showMsg(msg,"Username wajib diisi.");
-  if(!password) return showMsg(msg,"Password wajib diisi.");
-
-  const resp = await api({ action:"admin_pic_create", adminKey, layanan, nama, username, password, role, aktif });
-  if(!resp.ok) return showMsg(msg, resp.message || "Gagal menambah PIC.");
-  showMsg(msg, "PIC berhasil ditambahkan.", "success");
-
-  document.getElementById("picNama").value = "";
-  document.getElementById("picUsername").value = "";
-  document.getElementById("picPassword").value = "";
-  document.getElementById("picAktif").value = "YES";
-  document.getElementById("picRole").value = "PIC";
-
-  await loadPicList();
-});
-
-/* ===============================
-   BOOKING MONITOR (lama)
-================================ */
-function renderBookingTable(rows){
-  const tb = document.getElementById("bookingTable");
-  tb.innerHTML = "";
-
-  rows.forEach(r=>{
+document.getElementById("loadSelesaiBtn").onclick = async () => {
+  const msg = document.getElementById("selesaiMsg"); msg.innerHTML = "Memproses...";
+  const resp = await api({ action:"admin_selesai_report", adminKey, date_from: document.getElementById("sFrom").value, date_to: document.getElementById("sTo").value, layanan: document.getElementById("sLayanan").value });
+  if(!resp.ok) return showMsg(msg, resp.message);
+  showMsg(msg, `Ditemukan ${resp.total} data selesai.`, "success");
+  
+  const tbSvc = document.getElementById("selesaiSvcTable"); tbSvc.innerHTML = "";
+  (resp.by_service || []).forEach(x => {
     const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="px-4 py-3">${r.tanggal||""}</td>
-      <td class="px-4 py-3">${r.slot||""}</td>
-      <td class="px-4 py-3">${r.layanan||""}</td>
-      <td class="px-4 py-3">${r.nama||""}</td>
-      <td class="px-4 py-3">${r.nip||""}</td>
-      <td class="px-4 py-3">
-        <select class="bStatus border rounded px-2 py-2" data-code="${r.bookingCode}">
-          ${["Booked","Hadir","Selesai","Batal","No-show"].map(s =>
-            `<option value="${s}" ${r.status===s?"selected":""}>${s}</option>`
-          ).join("")}
-        </select>
-      </td>
-      <td class="px-4 py-3">
-        <button class="bSave bg-blue-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-blue-700"
-          data-code="${r.bookingCode}">Simpan</button>
-      </td>
-    `;
-    tb.appendChild(tr);
-  });
-
-  document.querySelectorAll(".bSave").forEach(btn=>{
-    btn.addEventListener("click", async ()=>{
-      const code = btn.dataset.code;
-      const status = document.querySelector(`.bStatus[data-code="${code}"]`).value;
-
-      const resp = await api({ action:"admin_booking_update_status", adminKey, bookingCode: code, status });
-      alert(resp.ok ? "Status booking diperbarui" : (resp.message || "Gagal"));
-    });
-  });
-}
-
-document.getElementById("loadBookingBtn").addEventListener("click", async ()=>{
-  const msg = document.getElementById("bookingMsg");
-  clearMsg(msg);
-
-  const date_from = document.getElementById("fFrom").value; // kosong = ALL
-  const date_to   = document.getElementById("fTo").value;   // kosong = ALL
-  const layanan = document.getElementById("fLayanan").value;
-  const status = document.getElementById("fStatus").value;
-  const nip = document.getElementById("fNip").value.trim();
-
-  const resp = await api({
-    action:"admin_booking_list",
-    adminKey,
-    date_from,
-    date_to,
-    layanan,
-    status,
-    nip
-  });
-
-  if(!resp.ok) return showMsg(msg, resp.message || "Gagal memuat booking.");
-
-  const rows = resp.rows || [];
-  showMsg(msg, `Ditemukan ${rows.length} booking.`, "success");
-  renderBookingTable(rows);
-});
-
-document.getElementById("resetFilterBtn").addEventListener("click", ()=>{
-  document.getElementById("fFrom").value = "";
-  document.getElementById("fTo").value = "";
-  document.getElementById("fLayanan").value = "ALL";
-  document.getElementById("fStatus").value = "ALL";
-  document.getElementById("fNip").value = "";
-  document.getElementById("bookingTable").innerHTML = "";
-  clearMsg(document.getElementById("bookingMsg"));
-});
-
-/* ===============================
-   MONITORING SELESAI (baru)
-================================ */
-function escapeHtml(s){
-  return String(s ?? "").replace(/[&<>"']/g, (m) => ({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-  }[m]));
-}
-
-function setSelesaiMsg(text, type="error"){
-  const el = document.getElementById("selesaiMsg");
-  if(!el) return;
-  const cls = type==="success"
-    ? "bg-green-50 border-green-200 text-green-800"
-    : (type==="info" ? "bg-blue-50 border-blue-200 text-blue-800" : "bg-red-50 border-red-200 text-red-800");
-  el.innerHTML = `<div class="${cls} border p-3 rounded-xl text-sm">${text}</div>`;
-}
-function clearSelesaiMsg(){
-  const el = document.getElementById("selesaiMsg");
-  if(el) el.innerHTML = "";
-}
-
-function renderSelesai(resp){
-  const total = Number(resp.total || 0);
-
-  document.getElementById("selesaiTotal").textContent = total;
-
-  if(resp.top_service){
-    document.getElementById("selesaiTopSvc").textContent = resp.top_service.layanan || "-";
-    document.getElementById("selesaiTopSvcNote").textContent = `${resp.top_service.count || 0} selesai`;
-  } else {
-    document.getElementById("selesaiTopSvc").textContent = "-";
-    document.getElementById("selesaiTopSvcNote").textContent = "0 selesai";
-  }
-
-  // per layanan
-  const tbSvc = document.getElementById("selesaiSvcTable");
-  tbSvc.innerHTML = "";
-  (resp.by_service || []).forEach(x=>{
-    const pct = Math.max(0, Math.min(100, Number(x.pct || 0)));
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="px-4 py-3 font-semibold">${escapeHtml(x.layanan)}</td>
-      <td class="px-4 py-3">${Number(x.count||0)}</td>
-      <td class="px-4 py-3">${pct.toFixed(1)}%</td>
-      <td class="px-4 py-3">
-        <div class="w-56 max-w-full bg-slate-100 border border-slate-200 rounded-full h-3 overflow-hidden">
-          <div class="h-3 bg-blue-600" style="width:${pct}%"></div>
-        </div>
-      </td>
-    `;
+    tr.innerHTML = `<td class="px-4 py-4 font-bold text-slate-700">${x.layanan}</td><td class="px-4 py-4 font-black">${x.count}</td><td class="px-4 py-4 font-bold text-slate-500">${x.pct.toFixed(1)}%</td><td class="px-4 py-4 text-center"><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-600 h-1.5" style="width:${x.pct}%"></div></div></td>`;
     tbSvc.appendChild(tr);
   });
+  await loadSurveyStats();
+};
 
-  // detail rows
-  const rows = resp.rows || [];
-  document.getElementById("selesaiCountLabel").textContent = `${rows.length} data`;
-
-  const tb = document.getElementById("selesaiTable");
-  tb.innerHTML = "";
-  rows.forEach(r=>{
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="px-4 py-3 font-mono text-xs">${escapeHtml(r.bookingCode)}</td>
-      <td class="px-4 py-3">${escapeHtml(r.tanggal)}</td>
-      <td class="px-4 py-3">${escapeHtml(r.layanan)}</td>
-      <td class="px-4 py-3">${escapeHtml(r.nama)}</td>
-      <td class="px-4 py-3">${escapeHtml(r.nip)}</td>
-      <td class="px-4 py-3">${escapeHtml(r.keperluan)}</td>
-    `;
-    tb.appendChild(tr);
-  });
-}
-
-document.getElementById("loadSelesaiBtn").addEventListener("click", async ()=>{
-  clearSelesaiMsg();
-
-  const date_from = document.getElementById("sFrom").value;
-  const date_to   = document.getElementById("sTo").value;
-  const layanan   = document.getElementById("sLayanan").value || "ALL";
-
-  // reset UI
-  document.getElementById("selesaiSvcTable").innerHTML = "";
-  document.getElementById("selesaiTable").innerHTML = "";
-  document.getElementById("selesaiTotal").textContent = "0";
-  document.getElementById("selesaiTopSvc").textContent = "-";
-  document.getElementById("selesaiTopSvcNote").textContent = "0 selesai";
-  document.getElementById("selesaiCountLabel").textContent = "0 data";
-
-  setSelesaiMsg("Memuat data selesai...", "info");
-
-  try{
-    const resp = await api({
-      action: "admin_selesai_report",
-      adminKey,
-      date_from,
-      date_to,
-      layanan
-    });
-
-    if(!resp.ok){
-      setSelesaiMsg(resp.message || "Gagal memuat data selesai.", "error");
-      return;
-    }
-
-    renderSelesai(resp);
-
-    if(Number(resp.total || 0) === 0){
-      setSelesaiMsg("Tidak ada data selesai untuk filter tersebut.", "success");
-    } else {
-      setSelesaiMsg(`Ditemukan ${resp.total} booking selesai.`, "success");
-    }
-  } catch(e){
-    setSelesaiMsg("Gagal menghubungi server.", "error");
-  }
-});
-
-/* ===============================
-   LOGIN / LOGOUT / REFRESH
-================================ */
-document.getElementById("loginBtn").addEventListener("click", async ()=>{
+document.getElementById("loginBtn").onclick = async () => {
   const key = document.getElementById("adminKey").value;
-  const msg = document.getElementById("loginMsg");
-  clearMsg(msg);
-
+  const resp = await api({ action:"admin_services_all", adminKey: key });
+  if(!resp.ok) return showMsg(document.getElementById("loginMsg"), "Password Salah");
   adminKey = key;
-
-  // test auth via services
-  const resp = await api({ action:"admin_services_all", adminKey });
-  if(!resp.ok){
-    adminKey = "";
-    return showMsg(msg, resp.message || "Password admin salah.");
-  }
-
   document.getElementById("loginCard").classList.add("hidden");
   document.getElementById("panel").classList.remove("hidden");
   document.getElementById("logoutBtn").classList.remove("hidden");
+  await loadServices(); await loadPicList();
+};
 
-  // default booking filters => ALL dates
-  document.getElementById("fFrom").value = "";
-  document.getElementById("fTo").value = "";
-
-  // default selesai filters => ALL dates
-  document.getElementById("sFrom").value = "";
-  document.getElementById("sTo").value = "";
-
-  await loadServices();
-  await loadPicList();
-});
-
-document.getElementById("logoutBtn").addEventListener("click", ()=>{
-  location.reload();
-});
-
-document.getElementById("refreshAllBtn").addEventListener("click", async ()=>{
-  if(!adminKey) return;
-  await loadServices();
-  await loadPicList();
-});
+document.getElementById("logoutBtn").onclick = () => location.reload();
 </script>
-
 </body>
 </html>
