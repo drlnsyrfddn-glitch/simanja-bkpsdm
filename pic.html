@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SI-MANJA — Dashboard PIC</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .card { border: 1px solid rgba(148,163,184,0.25); box-shadow: 0 10px 30px rgba(15,23,42,0.05); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+<div class="bg-blue-600 text-white">
+  <div class="max-w-6xl mx-auto px-6 py-2 text-xs md:text-sm flex flex-col md:flex-row gap-1 md:gap-6 justify-between">
+    <div class="opacity-95 text-xs font-bold">SI-MANJA — Dashboard PIC • Kabupaten Luwu Timur</div>
+    <div class="opacity-95 text-xs">Gunakan filter status "Selesai" untuk memicu survey kepuasan.</div>
+  </div>
+</div>
+
+<header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+  <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <a href="index.html" class="flex items-center gap-3">
+      <img src="assets/logo1.png" alt="Logo" class="h-11 w-auto object-contain" />
+      <div class="leading-tight">
+        <div class="font-extrabold text-slate-900 tracking-tight text-lg">SI-MANJA</div>
+        <div class="text-[10px] text-slate-500 font-bold -mt-1 uppercase tracking-tighter">Dashboard PIC • BKPSDM</div>
+      </div>
+    </a>
+    <div class="flex items-center gap-3">
+      <div id="headerBadge" class="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-slate-50 border border-slate-200 text-[10px] font-black text-slate-700 uppercase">
+        <span id="headerPic">PIC: -</span>
+        <span class="text-slate-400">•</span>
+        <span id="headerLayanan">Layanan: -</span>
+      </div>
+      <button id="logoutBtn" class="hidden px-4 py-2 text-xs rounded-xl bg-red-500 text-white hover:bg-red-600 font-black uppercase transition">Logout</button>
+    </div>
+  </nav>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-8 space-y-6">
+
+  <div id="surveyModal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-300">
+      <div class="bg-blue-600 p-6 text-white flex justify-between items-center">
+        <div>
+          <h3 class="font-black text-xl tracking-tight uppercase">Survey Kepuasan</h3>
+          <p id="surveyTargetName" class="text-xs opacity-90 mt-1 font-bold italic tracking-wide uppercase"></p>
+        </div>
+        <button onclick="closeSurvey()" class="p-2 hover:bg-blue-700 rounded-full transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+        </button>
+      </div>
+      <div class="p-6 overflow-y-auto space-y-4 bg-slate-50" id="surveyQuestions"></div>
+      <div class="p-6 border-t bg-white flex gap-3">
+        <button onclick="closeSurvey()" class="flex-1 py-4 rounded-2xl border-2 border-slate-200 font-black text-slate-600 hover:bg-slate-50 transition uppercase text-xs">Batal</button>
+        <button onclick="submitSurvey()" class="flex-1 py-4 rounded-2xl bg-blue-600 text-white font-black hover:bg-blue-700 transition shadow-lg shadow-blue-200 uppercase text-xs">Simpan & Selesai</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loginCard" class="card bg-white rounded-[32px] p-8 max-w-xl mx-auto">
+    <div class="text-center mb-6">
+      <h2 class="text-3xl font-black tracking-tighter">LOGIN PIC</h2>
+      <p class="text-xs text-slate-500 font-bold uppercase mt-1 tracking-widest">Akses Pengelolaan Layanan</p>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <label class="text-[10px] font-black uppercase text-slate-500 ml-1">Pilih Layanan</label>
+        <select id="loginLayanan" class="mt-1 w-full border border-slate-200 rounded-2xl px-4 py-4 bg-slate-50 font-bold text-sm focus:ring-2 focus:ring-blue-500 outline-none">
+          <option value="">Memuat layanan...</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-[10px] font-black uppercase text-slate-500 ml-1">Username</label>
+        <input id="loginUsername" placeholder="Username" class="mt-1 w-full border border-slate-200 rounded-2xl px-4 py-4 bg-slate-50 font-bold text-sm outline-none" />
+      </div>
+      <div>
+        <label class="text-[10px] font-black uppercase text-slate-500 ml-1">Password</label>
+        <input id="loginPassword" type="password" placeholder="Password" class="mt-1 w-full border border-slate-200 rounded-2xl px-4 py-4 bg-slate-50 font-bold text-sm outline-none" />
+      </div>
+      <button id="loginBtn" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black hover:bg-blue-700 transition shadow-xl shadow-blue-100 uppercase tracking-widest text-sm">Masuk</button>
+    </div>
+    <div id="loginMsg" class="mt-4"></div>
+  </div>
+
+  <div id="panel" class="hidden space-y-6">
+    <div class="card bg-white rounded-[32px] p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center font-black text-xl">P</div>
+          <div>
+            <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Sedang Login</div>
+            <div class="text-xl font-black tracking-tight" id="picName">-</div>
+          </div>
+        </div>
+        <div class="md:text-right bg-slate-50 px-5 py-3 rounded-2xl border border-slate-100">
+          <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Layanan Aktif</div>
+          <div class="text-lg font-black text-blue-600 tracking-tight" id="picLayanan">-</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card bg-white rounded-[32px] p-6">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <div>
+          <h2 class="text-2xl font-black tracking-tight">Daftar Booking</h2>
+          <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Kelola kedatangan pemohon hari ini</p>
+        </div>
+        <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+          <input type="date" id="filterTanggal" class="border border-slate-200 rounded-xl px-4 py-2 font-bold text-sm outline-none" />
+          <select id="statusFilter" class="border border-slate-200 rounded-xl px-4 py-2 font-bold text-sm bg-white outline-none">
+            <option value="ALL">Semua Status</option>
+            <option value="Booked">Booked</option>
+            <option value="Hadir">Hadir</option>
+            <option value="Selesai">Selesai</option>
+            <option value="Batal">Batal</option>
+            <option value="No-show">No-show</option>
+          </select>
+          <button id="loadBookingBtn" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-black hover:bg-blue-700 transition uppercase text-xs">Muat Data</button>
+        </div>
+      </div>
+      <div id="bookingMsg" class="mb-4"></div>
+      <div class="overflow-hidden rounded-2xl border border-slate-100">
+        <table class="min-w-full text-sm">
+          <thead class="bg-slate-50">
+            <tr>
+              <th class="px-4 py-4 text-left font-black text-slate-500 uppercase text-[10px] tracking-widest">Slot</th>
+              <th class="px-4 py-4 text-left font-black text-slate-500 uppercase text-[10px] tracking-widest">Nama Pemohon</th>
+              <th class="px-4 py-4 text-left font-black text-slate-500 uppercase text-[10px] tracking-widest">NIP</th>
+              <th class="px-4 py-4 text-left font-black text-slate-500 uppercase text-[10px] tracking-widest">Status</th>
+              <th class="px-4 py-4 text-left font-black text-slate-500 uppercase text-[10px] tracking-widest">Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="bookingTable" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzKebxSRf7BfZwAA16MHaP4bX4q72xsjcmROECyrHblIzEv05i-53nhi3m6QAeV0jPD/exec";
+
+let currentLayanan = "";
+let currentUsername = "";
+let currentPassword = "";
+let lastLoadedRows = [];
+let currentSurveyCode = "";
+
+const questions = [
+  "Antarmuka SI-MANJA sangat mudah dipahami.",
+  "Proses reservasi tidak memakan waktu lama.",
+  "Membantu menghindari waktu sibuk di kantor.",
+  "Memberikan kepastian jadwal kunjungan.",
+  "Waktu tunggu di kantor menjadi lebih singkat.",
+  "Tidak ada penumpukan tamu di area tunggu.",
+  "Kedatangan terdata rapi (tanpa berebut antrean).",
+  "Alur pelayanan menjadi lebih terstruktur.",
+  "Informasi status antrean memberikan kejelasan.",
+  "Layanan BKPSDM menjadi lebih profesional.",
+  "Petugas (PIC) tampak lebih siap melayani.",
+  "Petugas fokus melayani (tanpa interupsi tamu lain).",
+  "Privasi konsultasi terjaga (tidak ada penyerobot).",
+  "Durasi pertemuan lebih efektif dan tepat sasaran.",
+  "Lebih memilih SI-MANJA daripada Walk-in langsung."
+];
+
+async function api(payload) {
+  const res = await fetch(ENDPOINT_URL, {
+    method: "POST",
+    headers: { "Content-Type": "text/plain" },
+    body: JSON.stringify(payload)
+  });
+  return await res.json();
+}
+
+function renderTable(rows) {
+  const tbody = document.getElementById("bookingTable");
+  tbody.innerHTML = "";
+  if (!rows || rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="px-4 py-10 text-center text-slate-400 font-bold uppercase text-xs">Tidak ada data booking.</td></tr>`;
+    return;
+  }
+  rows.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.className = "hover:bg-slate-50/50 transition";
+    tr.innerHTML = `
+      <td class="px-4 py-4 whitespace-nowrap text-xs font-black text-blue-600">${r.slot || "-"}</td>
+      <td class="px-4 py-4 text-xs font-bold">${r.nama || "-"}</td>
+      <td class="px-4 py-4 text-xs font-mono text-slate-500">${r.nip || "-"}</td>
+      <td class="px-4 py-4">
+        <select data-code="${r.bookingCode}" class="statusSel border border-slate-200 rounded-lg px-2 py-2 text-[10px] font-black bg-white outline-none">
+          ${["Booked","Hadir","Selesai","Batal","No-show"].map(s => `<option value="${s}" ${r.status===s ? "selected" : ""}>${s}</option>`).join("")}
+        </select>
+      </td>
+      <td class="px-4 py-4 whitespace-nowrap">
+        <button data-code="${r.bookingCode}" data-nama="${r.nama}" class="updateBtn bg-blue-600 text-white px-5 py-2 rounded-xl text-[10px] font-black hover:bg-blue-700 transition uppercase tracking-widest">Simpan</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.querySelectorAll(".updateBtn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const code = btn.dataset.code;
+      const nama = btn.dataset.nama;
+      const status = document.querySelector(`select[data-code="${code}"]`).value;
+      if (status === "Selesai") {
+        openSurvey(code, nama);
+      } else {
+        processStatusUpdate(code, status);
+      }
+    });
+  });
+}
+
+function openSurvey(code, nama) {
+  currentSurveyCode = code;
+  document.getElementById('surveyTargetName').textContent = "PENGUNJUNG: " + nama;
+  const container = document.getElementById('surveyQuestions');
+  container.innerHTML = "";
+  questions.forEach((q, i) => {
+    container.innerHTML += `
+      <div class="p-4 bg-white rounded-2xl border border-slate-200/60 shadow-sm space-y-3">
+        <p class="text-[11px] font-black text-slate-800 leading-tight">${i+1}. ${q}</p>
+        <div class="flex justify-between items-center gap-1">
+          ${[1, 2, 3, 4, 5].map(v => `
+            <label class="flex-1 text-center cursor-pointer">
+              <input type="radio" name="q${i}" value="${v}" class="hidden peer" ${v===5?'checked':''}>
+              <div class="py-2.5 rounded-xl border-2 border-slate-100 text-[10px] font-black peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 transition uppercase tracking-tighter">${v}</div>
+            </label>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  });
+  document.getElementById('surveyModal').classList.remove('hidden');
+}
+
+function closeSurvey() { document.getElementById('surveyModal').classList.add('hidden'); }
+
+async function submitSurvey() {
+  let results = [];
+  questions.forEach((_, i) => {
+    const radio = document.querySelector(`input[name="q${i}"]:checked`);
+    results.push(radio ? radio.value : "5");
+  });
+  await processStatusUpdate(currentSurveyCode, "Selesai", results.join(","));
+  closeSurvey();
+}
+
+async function processStatusUpdate(code, status, surveyData = "") {
+  try {
+    const resp = await api({
+      action: "pic_update_status",
+      layanan: currentLayanan,
+      username: currentUsername,
+      password: currentPassword,
+      bookingCode: code,
+      status: status,
+      surveyData: surveyData
+    });
+    if (!resp.ok) return alert(resp.message || "Gagal update.");
+    alert("Data berhasil diperbarui!");
+    document.getElementById("loadBookingBtn").click();
+  } catch (e) { alert("Gagal menghubungi server."); }
+}
+
+async function loadServices() {
+  const select = document.getElementById("loginLayanan");
+  try {
+    const data = await api({ action: "get_services" });
+    if (!data.ok) return select.innerHTML = `<option value="">(Gagal)</option>`;
+    select.innerHTML = `<option value="">-- PILIH LAYANAN --</option>`;
+    (data.services || []).forEach(s => {
+      const opt = document.createElement("option");
+      opt.value = s.layanan;
+      opt.textContent = s.layanan;
+      select.appendChild(opt);
+    });
+  } catch (e) { select.innerHTML = `<option value="">(Error)</option>`; }
+}
+
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const layanan = document.getElementById("loginLayanan").value;
+  const username = document.getElementById("loginUsername").value.trim();
+  const password = document.getElementById("loginPassword").value.trim();
+  if (!layanan || !username || !password) return alert("Lengkapi data!");
+  try {
+    const data = await api({ action: "pic_login", layanan, username, password });
+    if (!data.ok) return alert(data.message || "Gagal!");
+    currentLayanan = layanan; currentUsername = username; currentPassword = password;
+    document.getElementById("loginCard").classList.add("hidden");
+    document.getElementById("panel").classList.remove("hidden");
+    document.getElementById("picName").textContent = data.nama_pic || username;
+    document.getElementById("picLayanan").textContent = data.layanan || layanan;
+    document.getElementById("headerBadge").classList.remove("hidden");
+    document.getElementById("headerPic").textContent = `PIC: ${data.nama_pic}`;
+    document.getElementById("headerLayanan").textContent = `Layanan: ${layanan}`;
+    document.getElementById("logoutBtn").classList.remove("hidden");
+    const now = new Date();
+    document.getElementById("filterTanggal").value = now.toISOString().split('T')[0];
+    document.getElementById("loadBookingBtn").click();
+  } catch (e) { alert("Error Server"); }
+});
+
+document.getElementById("loadBookingBtn").addEventListener("click", async () => {
+  const tanggal = document.getElementById("filterTanggal").value;
+  if (!tanggal) return;
+  try {
+    const data = await api({ action: "pic_list", layanan: currentLayanan, username: currentUsername, password: currentPassword, tanggal });
+    if (!data.ok) return alert("Gagal muat data.");
+    lastLoadedRows = data.rows || [];
+    applyStatusFilter();
+  } catch (e) { alert("Error muat data."); }
+});
+
+function applyStatusFilter(){
+  const status = document.getElementById("statusFilter").value;
+  const rows = (status === "ALL") ? lastLoadedRows : lastLoadedRows.filter(r => r.status === status);
+  renderTable(rows);
+}
+
+document.getElementById("statusFilter").addEventListener("change", applyStatusFilter);
+document.getElementById("logoutBtn").addEventListener("click", () => location.reload());
+loadServices();
+</script>
+</body>
+</html>

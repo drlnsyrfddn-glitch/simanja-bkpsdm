@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BKPSDM — Admin SI-MANJA</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .card { border:1px solid rgba(148,163,184,.25); box-shadow:0 10px 30px rgba(15,23,42,.05); }
+    .tab-btn.active { background:#2563eb; color:white; border-color:#2563eb; }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900">
+
+<header class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+  <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <img src="assets/logo1.png" alt="Logo" class="w-10 h-10 object-contain" />
+      <div>
+        <div class="text-lg font-extrabold leading-tight tracking-tight text-slate-900">SI-MANJA</div>
+        <div class="text-[10px] text-slate-500 font-bold uppercase tracking-tighter">Admin Panel • BKPSDM</div>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="index.html" class="px-4 py-2 border rounded-xl text-xs font-bold hover:bg-slate-50">Home</a>
+      <button id="logoutBtn" class="hidden px-4 py-2 bg-blue-600 text-white rounded-xl text-xs font-bold hover:bg-blue-700">Logout</button>
+    </div>
+  </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-6 py-8 space-y-6">
+
+  <div id="loginCard" class="card bg-white rounded-[32px] p-8 max-w-lg mx-auto text-center">
+    <h2 class="text-2xl font-black mb-2 tracking-tight">ADMIN LOGIN</h2>
+    <p class="text-xs text-slate-500 font-bold uppercase mb-6 tracking-widest">Akses Manajemen Sistem</p>
+    <div class="text-left">
+      <label class="text-[10px] font-black uppercase text-slate-400 ml-1">Admin Password</label>
+      <input id="adminKeyInput" type="password" class="mt-1 w-full border rounded-2xl px-5 py-4 bg-slate-50 font-bold focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Masukkan password" />
+    </div>
+    <button id="loginBtn" class="mt-6 w-full bg-blue-600 text-white py-4 rounded-2xl font-black hover:bg-blue-700 transition shadow-xl shadow-blue-100 uppercase tracking-widest text-sm text-center">Masuk</button>
+    <div id="loginMsg" class="mt-4"></div>
+  </div>
+
+  <div id="panel" class="hidden space-y-6">
+    <div class="flex flex-wrap gap-2">
+      <button id="tabPic" class="tab-btn active px-5 py-2.5 rounded-xl border font-black text-xs uppercase tracking-wider transition">Kelola PIC</button>
+      <button id="tabBooking" class="tab-btn px-5 py-2.5 rounded-xl border font-black text-xs uppercase tracking-wider transition">Monitoring Booking</button>
+      <button id="tabSelesai" class="tab-btn px-5 py-2.5 rounded-xl border font-black text-xs uppercase tracking-wider transition">Monitoring Selesai & Survey</button>
+      <button id="refreshAllBtn" class="ml-auto px-5 py-2.5 rounded-xl border font-black text-xs uppercase tracking-wider hover:bg-slate-50 transition">Refresh</button>
+    </div>
+
+    <section id="secPic" class="space-y-6">
+      <div class="card bg-white rounded-[32px] p-8">
+        <h2 class="text-xl font-black tracking-tight mb-4 uppercase">Tambah PIC Layanan</h2>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Layanan</label><select id="picLayanan" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm"></select></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Nama PIC</label><input id="picNama" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm" placeholder="Nama Lengkap" /></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Role</label><select id="picRole" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm"><option value="PIC">PIC</option><option value="KOORDINATOR">KOORDINATOR</option></select></div>
+        </div>
+        <div class="grid md:grid-cols-3 gap-5 mt-4">
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Username</label><input id="picUsername" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm" placeholder="Username" /></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Password</label><input id="picPassword" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm" placeholder="Password Awal" /></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Status Aktif</label><select id="picAktif" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm"><option value="YES">YES</option><option value="NO">NO</option></select></div>
+        </div>
+        <button id="addPicBtn" class="mt-6 bg-blue-600 text-white px-8 py-3 rounded-xl font-black hover:bg-blue-700 transition uppercase text-xs tracking-widest">Simpan Akun PIC</button>
+        <div id="picMsg" class="mt-4"></div>
+      </div>
+      <div class="card bg-white rounded-[32px] p-8">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-lg font-black tracking-tight uppercase">Daftar Akun PIC</h3>
+          <input id="searchInput" class="border rounded-xl px-4 py-2 text-xs font-bold w-64" placeholder="Cari PIC..." />
+        </div>
+        <div class="overflow-auto rounded-2xl border">
+          <table class="min-w-full text-xs text-left">
+            <thead class="bg-slate-50">
+              <tr>
+                <th class="px-4 py-4 font-black text-slate-500 uppercase">Layanan</th>
+                <th class="px-4 py-4 font-black text-slate-500 uppercase">Nama</th>
+                <th class="px-4 py-4 font-black text-slate-500 uppercase">Username</th>
+                <th class="px-4 py-4 font-black text-slate-500 uppercase">Status</th>
+                <th class="px-4 py-4 text-center font-black text-slate-500 uppercase">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="picTable" class="divide-y"></tbody>
+          </table>
+        </div>
+        <div id="listMsg" class="mt-4"></div>
+      </div>
+    </section>
+
+    <section id="secSelesai" class="hidden space-y-6">
+      <div class="card bg-white rounded-[32px] p-8">
+        <div class="flex justify-between items-end gap-4 mb-6">
+          <div><h2 class="text-2xl font-black tracking-tight">Monitoring Selesai & Survey</h2><p class="text-xs text-slate-500 font-bold uppercase tracking-wider mt-1">Statistik kepuasan dan realisasi layanan</p></div>
+          <button id="loadSelesaiBtn" class="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black hover:bg-blue-700 transition uppercase text-xs tracking-widest shadow-lg shadow-blue-100 text-center">Muat Data</button>
+        </div>
+        <div class="grid md:grid-cols-3 gap-5">
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Dari Tanggal</label><input type="date" id="sFrom" class="mt-1 w-full border rounded-xl px-4 py-3 font-bold text-sm outline-none"></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Sampai Tanggal</label><input type="date" id="sTo" class="mt-1 w-full border rounded-xl px-4 py-3 font-bold text-sm outline-none"></div>
+          <div><label class="text-[10px] font-black text-slate-400 uppercase">Layanan</label><select id="sLayanan" class="mt-1 w-full border rounded-xl px-4 py-3 bg-slate-50 font-bold text-sm outline-none"><option value="ALL">ALL</option></select></div>
+        </div>
+        <div id="selesaiMsg" class="mt-4"></div>
+
+        <div class="mt-10 grid lg:grid-cols-2 gap-8">
+          <div class="card bg-white rounded-3xl p-6 border border-slate-100 flex flex-col justify-center">
+            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 text-center">Grafik Radar Kepuasan (IKL)</h3>
+            <div class="relative h-[320px] flex items-center justify-center">
+              <canvas id="surveyChart"></canvas>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="rounded-[28px] bg-blue-600 p-8 text-white shadow-2xl shadow-blue-200">
+              <div class="text-[10px] font-black uppercase tracking-widest opacity-80">Indeks Kepuasan Layanan (IKL)</div>
+              <div class="mt-2 text-6xl font-black tracking-tighter" id="sklTotal">0.0</div>
+              <div class="mt-3 text-xs font-bold opacity-90 italic uppercase tracking-wider" id="sklResponden">Berdasarkan 0 Responden</div>
+            </div>
+            <div class="grid gap-3">
+              <div class="p-5 rounded-2xl border bg-white"><div class="flex justify-between text-[10px] font-black uppercase text-slate-500"><span>Efisiensi Waktu</span><span id="valEfisiensi" class="text-blue-600">0</span></div><div class="mt-2 w-full bg-slate-100 rounded-full h-2 overflow-hidden"><div id="barEfisiensi" class="bg-blue-600 h-2 transition-all duration-1000" style="width: 0%"></div></div></div>
+              <div class="p-5 rounded-2xl border bg-white"><div class="flex justify-between text-[10px] font-black uppercase text-slate-500"><span>Kenyamanan Antrean</span><span id="valKenyamanan" class="text-emerald-500">0</span></div><div class="mt-2 w-full bg-slate-100 rounded-full h-2 overflow-hidden"><div id="barKenyamanan" class="bg-emerald-500 h-2 transition-all duration-1000" style="width: 0%"></div></div></div>
+              <div class="p-5 rounded-2xl border bg-white"><div class="flex justify-between text-[10px] font-black uppercase text-slate-500"><span>Kualitas Pelayanan</span><span id="valKualitas" class="text-amber-500">0</span></div><div class="mt-2 w-full bg-slate-100 rounded-full h-2 overflow-hidden"><div id="barKualitas" class="bg-amber-500 h-2 transition-all duration-1000" style="width: 0%"></div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-10">
+          <h3 class="text-sm font-black text-slate-800 uppercase mb-4 tracking-widest">Realisasi Per Jenis Layanan</h3>
+          <div class="overflow-hidden rounded-2xl border">
+            <table class="min-w-full text-xs text-left"><thead class="bg-slate-50"><tr><th class="px-4 py-4 font-black text-slate-500 uppercase">Layanan</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Selesai</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Kontribusi</th><th class="px-4 py-4 font-black text-slate-500 uppercase text-center">Progress</th></tr></thead><tbody id="selesaiSvcTable" class="divide-y"></tbody></table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="secBooking" class="hidden">
+      <div class="card bg-white rounded-[32px] p-8">
+        <h2 class="text-xl font-black mb-6 uppercase tracking-tight">Monitoring Semua Booking</h2>
+        <div class="grid md:grid-cols-5 gap-4">
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Dari</label><input type="date" id="fFrom" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none"></div>
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Sampai</label><input type="date" id="fTo" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none"></div>
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Layanan</label><select id="fLayanan" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none"></select></div>
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Status</label><select id="fStatus" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none"><option value="ALL">ALL</option><option value="Booked">Booked</option><option value="Hadir">Hadir</option><option value="Selesai">Selesai</option><option value="Batal">Batal</option><option value="No-show">No-show</option></select></div>
+          <div><label class="text-[10px] font-black uppercase text-slate-400">Cari NIP</label><input id="fNip" class="mt-1 w-full border rounded-xl px-4 py-2 font-bold text-xs outline-none" placeholder="NIP"></div>
+        </div>
+        <div class="flex gap-2 mt-4"><button id="loadBookingBtn" class="bg-blue-600 text-white px-6 py-2 rounded-xl font-black text-[10px] uppercase">Muat</button><button id="resetFilterBtn" class="border px-6 py-2 rounded-xl font-black text-[10px] uppercase">Reset</button></div>
+        <div id="bookingMsg" class="mt-4"></div>
+        <div class="mt-6 overflow-hidden rounded-2xl border"><table class="min-w-full text-xs text-left"><thead class="bg-slate-50"><tr><th class="px-4 py-4 font-black text-slate-500 uppercase">Tanggal</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Slot</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Layanan</th><th class="px-4 py-4 font-black text-slate-500 uppercase">Nama</th><th class="px-4 py-4 font-black text-slate-500 uppercase text-center">Aksi</th></tr></thead><tbody id="bookingTable" class="divide-y"></tbody></table></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+// UPDATE LINK BERIKUT DENGAN LINK WEB APP TERBARU BAPAK
+const ENDPOINT_URL = "https://script.google.com/macros/s/AKfycbzKebxSRf7BfZwAA16MHaP4bX4q72xsjcmROECyrHblIzEv05i-53nhi3m6QAeV0jPD/exec";
+let adminKey = "";
+let allUsers = [];
+let myChart = null;
+
+async function api(payload) {
+  const res = await fetch(ENDPOINT_URL, { method:"POST", body: JSON.stringify(payload) });
+  return await res.json();
+}
+
+function showMsg(el,msg,type="error") {
+  const cls = type==="success" ? "bg-green-50 text-green-800 border-green-200" : "bg-red-50 text-red-800 border-red-200";
+  el.innerHTML = `<div class="${cls} border p-4 rounded-xl text-xs font-bold">${msg}</div>`;
+}
+
+function activateTab(which) {
+  ["tabPic","tabBooking","tabSelesai"].forEach(t => document.getElementById(t).classList.remove("active"));
+  ["secPic","secBooking","secSelesai"].forEach(s => document.getElementById(s).classList.add("hidden"));
+  document.getElementById("tab"+which).classList.add("active");
+  document.getElementById("sec"+which).classList.remove("hidden");
+}
+document.getElementById("tabPic").onclick = () => activateTab("Pic");
+document.getElementById("tabBooking").onclick = () => activateTab("Booking");
+document.getElementById("tabSelesai").onclick = () => activateTab("Selesai");
+
+// FUNGSI LOGIN
+document.getElementById("loginBtn").onclick = async () => {
+  const key = document.getElementById("adminKeyInput").value; // Perbaikan ID
+  const resp = await api({ action:"admin_services_all", adminKey: key });
+  if(!resp.ok) return showMsg(document.getElementById("loginMsg"), "Password Salah");
+  adminKey = key;
+  document.getElementById("loginCard").classList.add("hidden");
+  document.getElementById("panel").classList.remove("hidden");
+  document.getElementById("logoutBtn").classList.remove("hidden");
+  await loadServices(); await loadPicList();
+};
+
+// LOAD LAYANAN KE DROPDOWN
+async function loadServices() {
+  const data = await api({ action:"admin_services_all", adminKey });
+  if(!data.ok) return;
+  const selPic = document.getElementById("picLayanan");
+  const selFilter = document.getElementById("fLayanan");
+  const selSelesai = document.getElementById("sLayanan");
+  [selPic, selFilter, selSelesai].forEach(s => s.options.length = 0);
+  selPic.add(new Option("-- Pilih Layanan --", ""));
+  selFilter.add(new Option("ALL", "ALL"));
+  selSelesai.add(new Option("ALL", "ALL"));
+  const seen = new Set();
+  (data.services || []).forEach(s => {
+    const name = s.layanan.trim(); if(!name || seen.has(name)) return; seen.add(name);
+    selPic.add(new Option(name, name)); selFilter.add(new Option(name, name)); selSelesai.add(new Option(name, name));
+  });
+}
+
+// ========================
+// LOGIKA PIC (TAMBAH & HAPUS)
+// ========================
+
+// Fungsi Muat Daftar PIC
+async function loadPicList() {
+  const data = await api({ action:"admin_pic_list", adminKey });
+  if(!data.ok) return;
+  allUsers = data.users || []; 
+  renderPicList();
+}
+
+// Fungsi Render Tabel PIC
+function renderPicList() {
+  const tb = document.getElementById("picTable"); 
+  tb.innerHTML = "";
+  allUsers.forEach(u => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="px-4 py-4 font-bold text-blue-600">${u.layanan}</td>
+      <td class="px-4 py-4 uppercase">${u.nama}</td>
+      <td class="px-4 py-4 font-mono font-bold">${u.username}</td>
+      <td class="px-4 py-4">
+        <span class="px-2 py-1 rounded-full text-[10px] font-black ${u.aktif==='YES'?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">
+          ${u.aktif}
+        </span>
+      </td>
+      <td class="px-4 py-4 text-center">
+        <button onclick="deletePic('${u.layanan}','${u.username}')" class="text-red-500 font-black uppercase text-[10px] border border-red-100 px-3 py-1.5 rounded-lg hover:bg-red-50">Hapus</button>
+      </td>`;
+    tb.appendChild(tr);
+  });
+}
+
+// Tombol Simpan Akun PIC
+document.getElementById("addPicBtn").onclick = async () => {
+  const btn = document.getElementById("addPicBtn");
+  const msg = document.getElementById("picMsg");
+  btn.disabled = true;
+  btn.textContent = "Menyimpan...";
+
+  const payload = {
+    action: "admin_pic_create",
+    adminKey: adminKey,
+    layanan: document.getElementById("picLayanan").value,
+    nama: document.getElementById("picNama").value,
+    username: document.getElementById("picUsername").value,
+    password: document.getElementById("picPassword").value,
+    role: document.getElementById("picRole").value,
+    aktif: document.getElementById("picAktif").value
+  };
+
+  const resp = await api(payload);
+  if (resp.ok) {
+    showMsg(msg, "Akun PIC Berhasil Disimpan", "success");
+    // Reset Form
+    document.getElementById("picNama").value = "";
+    document.getElementById("picUsername").value = "";
+    document.getElementById("picPassword").value = "";
+    loadPicList();
+  } else {
+    showMsg(msg, resp.message);
+  }
+  btn.disabled = false;
+  btn.textContent = "Simpan Akun PIC";
+};
+
+// Fungsi Hapus PIC
+window.deletePic = async (layanan, username) => {
+  if (!confirm(`Hapus akun PIC ${username} di layanan ${layanan}?`)) return;
+  const resp = await api({ action: "admin_pic_delete", adminKey, layanan, username });
+  if (resp.ok) {
+    loadPicList();
+  } else {
+    alert("Gagal menghapus: " + resp.message);
+  }
+};
+
+// ========================
+// LOGIKA MONITORING & SURVEY (LAMA)
+// ========================
+
+async function loadSurveyStats() {
+  try {
+    const resp = await api({ action: "admin_survey_stats", adminKey });
+    if (!resp.ok) return;
+    document.getElementById("sklTotal").textContent = resp.ikl;
+    document.getElementById("sklResponden").textContent = `Berdasarkan ${resp.responden} Responden`;
+    document.getElementById("valEfisiensi").textContent = resp.detail.efisiensi;
+    document.getElementById("barEfisiensi").style.width = (resp.detail.efisiensi / 5 * 100) + "%";
+    document.getElementById("valKenyamanan").textContent = resp.detail.kenyamanan;
+    document.getElementById("barKenyamanan").style.width = (resp.detail.kenyamanan / 5 * 100) + "%";
+    document.getElementById("valKualitas").textContent = resp.detail.kualitas;
+    document.getElementById("barKualitas").style.width = (resp.detail.kualitas / 5 * 100) + "%";
+    renderSurveyChart(resp.detail);
+  } catch (e) { console.error(e); }
+}
+
+function renderSurveyChart(detail) {
+  const ctx = document.getElementById('surveyChart').getContext('2d');
+  if (myChart) myChart.destroy();
+  myChart = new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['EFISIENSI', 'KENYAMANAN', 'KUALITAS'],
+      datasets: [{
+        data: [detail.efisiensi, detail.kenyamanan, detail.kualitas],
+        backgroundColor: 'rgba(37, 99, 235, 0.15)', borderColor: '#2563eb', borderWidth: 4
+      }]
+    },
+    options: { scales: { r: { min: 0, max: 5, ticks: { display: false } } }, plugins: { legend: { display: false } } }
+  });
+}
+
+document.getElementById("loadSelesaiBtn").onclick = async () => {
+  const msg = document.getElementById("selesaiMsg"); 
+  msg.innerHTML = "Memproses...";
+  const resp = await api({ action:"admin_selesai_report", adminKey, date_from: document.getElementById("sFrom").value, date_to: document.getElementById("sTo").value, layanan: document.getElementById("sLayanan").value });
+  if(!resp.ok) return showMsg(msg, resp.message);
+  showMsg(msg, `Ditemukan ${resp.total} data selesai.`, "success");
+  
+  const tbSvc = document.getElementById("selesaiSvcTable"); tbSvc.innerHTML = "";
+  (resp.by_service || []).forEach(x => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="px-4 py-4 font-bold">${x.layanan}</td><td class="px-4 py-4">${x.count}</td><td class="px-4 py-4">${x.pct.toFixed(1)}%</td><td class="px-4 py-4 text-center"><div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden"><div class="bg-blue-600 h-1.5" style="width:${x.pct}%"></div></div></td>`;
+    tbSvc.appendChild(tr);
+  });
+  await loadSurveyStats();
+};
+
+document.getElementById("loadBookingBtn").onclick = async () => {
+  const resp = await api({ 
+    action: "admin_booking_list", 
+    adminKey, 
+    date_from: document.getElementById("fFrom").value,
+    date_to: document.getElementById("fTo").value,
+    layanan: document.getElementById("fLayanan").value,
+    status: document.getElementById("fStatus").value,
+    nip: document.getElementById("fNip").value
+  });
+  const tb = document.getElementById("bookingTable"); tb.innerHTML = "";
+  if(!resp.ok) return;
+  resp.rows.forEach(r => {
+    tb.innerHTML += `<tr><td class="px-4 py-4">${r.tanggal}</td><td class="px-4 py-4 font-mono">${r.slot}</td><td class="px-4 py-4 uppercase font-bold text-blue-600">${r.layanan}</td><td class="px-4 py-4 font-bold">${r.nama}</td><td class="px-4 py-4 text-center"><span class="px-2 py-1 rounded-full bg-slate-100 font-black text-[10px] uppercase">${r.status}</span></td></tr>`;
+  });
+};
+
+document.getElementById("logoutBtn").onclick = () => location.reload();
+</script>
+</body>
+</html>
